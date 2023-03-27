@@ -4,9 +4,19 @@ import com.sofkau.setup.ApiSetUp;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import net.serenitybdd.screenplay.rest.questions.LastResponse;
 import org.apache.http.HttpStatus;
 import org.apache.log4j.Logger;
 import org.junit.jupiter.api.Assertions;
+import org.w3c.dom.Document;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
+
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import java.io.IOException;
+import java.io.StringReader;
+
 import static com.sofkau.models.HeadersCalculadora.headersCalculadora;
 import static com.sofkau.questions.ResponseSoap.responseSoap;
 import static com.sofkau.tasks.DoPostSoap.doPostSoap;
@@ -47,7 +57,7 @@ public class CalculadoraStepDefinitions extends ApiSetUp {
         }
     }
     @Then("the user gets the result {string}")
-    public void theUserGetsTheResult(String string) {
+    public void theUserGetsTheResult(String string) throws ParserConfigurationException, IOException, SAXException {
         try{
             actor.should(
                     seeThatResponse("el codigo de respuesta es: " + HttpStatus.SC_OK,
@@ -59,7 +69,26 @@ public class CalculadoraStepDefinitions extends ApiSetUp {
             LOGGER.info("Error al comparar");
             LOGGER.warn(e.getMessage());
             Assertions.fail();
+        }finally {
+            LOGGER.info("| Esperado | Obtenido | Valor |");
+            status();
+            suma(string);
         }
+    }
+    private void suma(String string) throws ParserConfigurationException, IOException, SAXException {
+        String responseString = LastResponse.received().answeredBy(actor).asString();
+        Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(new InputSource(new StringReader(responseString)));
+        String convertedValue = doc.getElementsByTagName("AddResult").item(0).getTextContent().trim();
+        if (convertedValue.equalsIgnoreCase(string))
+            LOGGER.info("| "+ string +" | "+convertedValue+" | cumple |");
+        else
+            LOGGER.info("| "+ string +" | "+convertedValue+" | no cumple |");
+    }
+    private void status() {
+        if(LastResponse.received().answeredBy(actor).statusCode()==HttpStatus.SC_OK)
+            LOGGER.info("| "+HttpStatus.SC_OK+" | "+LastResponse.received().answeredBy(actor).statusCode()+" | cumple |");
+        else
+            LOGGER.info("| "+HttpStatus.SC_OK+" | "+LastResponse.received().answeredBy(actor).statusCode()+" | no cumple |");
     }
     private void loadBody(Integer int1, Integer int2) {
         body = readFile(CALCULATOR_BODY_PATH.getValue());

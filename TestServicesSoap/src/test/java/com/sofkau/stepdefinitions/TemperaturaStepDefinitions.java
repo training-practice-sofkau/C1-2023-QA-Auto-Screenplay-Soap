@@ -8,7 +8,14 @@ import net.serenitybdd.screenplay.rest.questions.LastResponse;
 import org.apache.http.HttpStatus;
 import org.apache.log4j.Logger;
 import org.junit.jupiter.api.Assertions;
+import org.w3c.dom.Document;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
 
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import java.io.IOException;
+import java.io.StringReader;
 import java.nio.charset.StandardCharsets;
 
 import static com.sofkau.models.HeadersGrados.headersGrados;
@@ -54,7 +61,7 @@ public class TemperaturaStepDefinitions extends ApiSetUp {
     }
 
     @Then("the user gets the convertion result {string}")
-    public void theUserGetsTheConvertionResult(String string) {
+    public void theUserGetsTheConvertionResult(String string) throws ParserConfigurationException, IOException, SAXException {
         try{
             actor.should(
                     seeThatResponse("el codigo de respuesta es: " + HttpStatus.SC_OK,
@@ -72,13 +79,14 @@ public class TemperaturaStepDefinitions extends ApiSetUp {
             temperatura(string);
         }
     }
-    private void temperatura(String string) {
-        if (LastResponse.received().answeredBy(actor).asString().substring(313,315).equalsIgnoreCase(string))
-            LOGGER.info("| "+ string +" | "+LastResponse.received().answeredBy(actor).asString().substring(313,315)+
-                    " | cumple |");
+    private void temperatura(String string) throws ParserConfigurationException, IOException, SAXException {
+        String responseString = LastResponse.received().answeredBy(actor).asString();
+        Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(new InputSource(new StringReader(responseString)));
+        String convertedValue = doc.getElementsByTagName("CelsiusToFahrenheitResult").item(0).getTextContent().trim();
+        if (convertedValue.equalsIgnoreCase(string))
+            LOGGER.info("| "+ string +" | "+convertedValue+" | cumple |");
         else
-            LOGGER.info("| "+ string +" | "+LastResponse.received().answeredBy(actor).asString().substring(313,315)+
-                    " | no cumple |");
+            LOGGER.info("| "+ string +" | "+convertedValue+" | no cumple |");
     }
 
     private void status() {
