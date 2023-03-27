@@ -1,9 +1,12 @@
 package com.sofkau.tasks;
 
+import jxl.demo.XML;
 import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.Task;
 import net.serenitybdd.screenplay.rest.interactions.Post;
 
+import javax.sql.rowset.spi.XmlReader;
+import javax.xml.soap.SOAPMessage;
 import java.util.Map;
 
 public class DoPostSoap implements Task {
