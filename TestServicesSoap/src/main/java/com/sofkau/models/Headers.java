@@ -7,8 +7,9 @@ public class Headers {
     private final Map<String, Object> headersCollection = new HashMap<>();
 
     public Map<String, Object> getHeadersCollection(){
+
         this.headersCollection.put("Content-Type", "text/xml;charset=UTF-8");
-        this.headersCollection.put("SOAPAction", "");
+        this.headersCollection.put("SOAPAction", "http://www.webserviceX.NET/ConversionRate");
         return headersCollection;
     }
 
@@ -16,3 +17,4 @@ public class Headers {
         return new Headers();
     }
 }
+
