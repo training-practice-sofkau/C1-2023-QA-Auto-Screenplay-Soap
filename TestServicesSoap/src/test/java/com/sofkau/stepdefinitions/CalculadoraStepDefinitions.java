@@ -11,10 +11,8 @@ import org.hamcrest.CoreMatchers;
 import org.junit.jupiter.api.Assertions;
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
-
 import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.StringReader;
-
 import static com.sofkau.models.HeaderSuma.headerSuma;
 import static com.sofkau.questions.ResponseSoap.responseSoap;
 import static com.sofkau.tasks.DoPostSoap.doPostSoap;

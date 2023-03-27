@@ -19,7 +19,6 @@ import static org.hamcrest.CoreMatchers.containsString;
 import javax.xml.parsers.DocumentBuilderFactory;
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
-
 import java.io.StringReader;
 
 public class NumtexStepDefinitions extends ApiSetUp {
