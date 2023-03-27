@@ -71,10 +71,64 @@ public class ConversionDollarsStepDefinitions extends ApiSetUp {
         }
 
     }
+
+    //Escenario outline
+    @Given("a user that wants to know the numbers {string} in dollares letters")
+    public void aUserThatWantsToKnowTheNumbersInDollaresLetters(String number) {
+        try {
+            setUp(SOAP_NUMBER_CONVERSION_BASE_URL.getValue());
+            LOGGER.info("INICIA LA AUTOMATIZACION");
+            loadBody2(number);
+        } catch (Exception e) {
+            LOGGER.info(" fallo la configuracion inicial");
+            LOGGER.warn(e.getMessage());
+            Assertions.fail();
+        }
+    }
+
+    @When("the user sends the request whit numbers to the api  Conversion dollares")
+    public void theUserSendsTheRequestWhitNumbersToTheApiConversionDollares() {
+        try {
+            actor.attemptsTo(
+                    doPostSoap()
+                            .andTheResource(RESOURCE_NUMBER_CONVERSION.getValue())
+                            .withTheHeaders(headers().getHeadersCollection())
+                            .andTheBody(body)
+            );
+            LOGGER.info("Realiza la peticion");
+        } catch (Exception e) {
+            LOGGER.info(" fallo al momento de realizar la peticion");
+            LOGGER.warn(e.getMessage());
+            Assertions.fail();
+        }
+    }
+
+    @Then("the user gets the numbers  in dollares in letters {string}")
+    public void theUserGetsTheNumbersInDollaresInLetters(String letters) {
+        try {
+            LOGGER.info(new String(LastResponse.received().answeredBy(actor).asByteArray(), StandardCharsets.UTF_8));
+            actor.should(
+                    seeThatResponse("el codigo de respuesta es: " + HttpStatus.SC_OK,
+                            response -> response.statusCode(HttpStatus.SC_OK)),
+                    seeThat(" El valor en dolares es",
+                            responseSoap(), containsString(letters))
+            );
+            LOGGER.info("CUMPLE");
+        } catch (Exception e) {
+            LOGGER.info("Error al realizar la comparacion");
+            LOGGER.warn(e.getMessage());
+            Assertions.fail();
+        }
+    }
     private void loadBody() {
 
         body = readFile(BODY_PATH_NUMBER_CON_DOLLAR.getValue());
         body = String.format(body, "4");
+    }
+    private void loadBody2(String numero) {
+
+        body = readFile(BODY_PATH_NUMBER_CON_DOLLAR.getValue());
+        body = String.format(body, numero);
     }
 }
 
