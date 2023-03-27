@@ -12,22 +12,23 @@ import org.junit.jupiter.api.Assertions;
 import java.nio.charset.StandardCharsets;
 
 import static com.sofkau.models.Headers.headers;
+import static com.sofkau.models.HeadersResta.headersResta;
 import static com.sofkau.questions.ResponseSoap.responseSoap;
 import static com.sofkau.tasks.DoPostSoap.doPostSoap;
 import static com.sofkau.utils.ManageFile.readFile;
-import static com.sofkau.utils.Path.*;
+import static com.sofkau.utils.RestaCalculadora.*;
 import static net.serenitybdd.screenplay.GivenWhenThen.seeThat;
 import static net.serenitybdd.screenplay.rest.questions.ResponseConsequence.seeThatResponse;
 import static org.hamcrest.CoreMatchers.containsString;
 
-public class CapitalStepDefinitions extends ApiSetUp {
+public class RestaCalculadoraStepDefinitions extends ApiSetUp {
     String body;
-    private static final Logger LOGGER = Logger.getLogger(CapitalStepDefinitions.class);
+    private static final Logger LOGGER = Logger.getLogger(RestaCalculadoraStepDefinitions.class);
 
-    @Given("a user that wants to know the actual capital")
-    public void aUserThatWantsToKnowTheActualCapital() {
+    @Given("that the user has access to the subtraction service of the calculator")
+    public void thatTheUserHasAccessToTheSubtractionServiceOfTheCalculator() {
         try {
-            setUp(SOAP_CAPITAL_BASE_URL.getValue());
+            setUp(SOAP_RESTA_CALCULADORA_URL.getValue());
             LOGGER.info("INICIA LA AUTOMATIZACION");
             loadBody();
         } catch (Exception e) {
@@ -37,14 +38,13 @@ public class CapitalStepDefinitions extends ApiSetUp {
         }
     }
 
-
-    @When("the user sends the request to the api")
-    public void theUserSendsTheRequestToTheApi() {
+    @When("sends a subtraction request with two integers")
+    public void sendsASubtractionRequestWithTwoIntegers() {
         try {
             actor.attemptsTo(
                     doPostSoap()
-                            .andTheResource(RESOURCE_CAPITAL.getValue())
-                            .withTheHeaders(headers().getHeadersCollection())
+                            .andTheResource(RESORUCE_RESTA_CALCULADORA.getValue())
+                            .withTheHeaders(headersResta().getHeadersCollection())
                             .andTheBody(body)
             );
             LOGGER.info("Realiza la peticion");
@@ -55,15 +55,15 @@ public class CapitalStepDefinitions extends ApiSetUp {
         }
     }
 
-    @Then("the user gets the capital")
-    public void theUserGetsTheCapital() {
+    @Then("should receive a successful response with the result of the subtraction")
+    public void shouldReceiveASuccessfulResponseWithTheResultOfTheSubtraction() {
         try {
             LOGGER.info(new String(LastResponse.received().answeredBy(actor).asByteArray(), StandardCharsets.UTF_8));
             actor.should(
                     seeThatResponse("el codigo de respuesta es: " + HttpStatus.SC_OK,
                             response -> response.statusCode(HttpStatus.SC_OK)),
-                    seeThat(" la capital es",
-                            responseSoap(), containsString("Bogota"))
+                    seeThat(" El resultado de la resta es: ",
+                            responseSoap(), containsString("22"))
             );
             LOGGER.info("CUMPLE");
         } catch (Exception e) {
@@ -74,7 +74,7 @@ public class CapitalStepDefinitions extends ApiSetUp {
     }
 
     private void loadBody() {
-        body = readFile(BODY_PATH.getValue());
-        body = String.format(body, "CO");
+        body = readFile(BODY_PATH_RESTA_CALCULADORA.getValue());
+        body = String.format(body, "30", "8");
     }
 }

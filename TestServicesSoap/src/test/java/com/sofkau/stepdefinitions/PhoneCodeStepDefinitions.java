@@ -15,19 +15,19 @@ import static com.sofkau.models.Headers.headers;
 import static com.sofkau.questions.ResponseSoap.responseSoap;
 import static com.sofkau.tasks.DoPostSoap.doPostSoap;
 import static com.sofkau.utils.ManageFile.readFile;
-import static com.sofkau.utils.Path.*;
+import static com.sofkau.utils.PhoneCode.*;
 import static net.serenitybdd.screenplay.GivenWhenThen.seeThat;
 import static net.serenitybdd.screenplay.rest.questions.ResponseConsequence.seeThatResponse;
 import static org.hamcrest.CoreMatchers.containsString;
 
-public class CapitalStepDefinitions extends ApiSetUp {
+public class PhoneCodeStepDefinitions extends ApiSetUp {
     String body;
-    private static final Logger LOGGER = Logger.getLogger(CapitalStepDefinitions.class);
+    private static final Logger LOGGER = Logger.getLogger(PhoneCodeStepDefinitions.class);
 
-    @Given("a user that wants to know the actual capital")
-    public void aUserThatWantsToKnowTheActualCapital() {
+    @Given("that the user wants to know the telephone code according to his country")
+    public void thatTheUserWantsToKnowTheTelephoneCodeAccordingToHisCountry() {
         try {
-            setUp(SOAP_CAPITAL_BASE_URL.getValue());
+            setUp(SOAP_PHONE_CODE_URL.getValue());
             LOGGER.info("INICIA LA AUTOMATIZACION");
             loadBody();
         } catch (Exception e) {
@@ -37,13 +37,12 @@ public class CapitalStepDefinitions extends ApiSetUp {
         }
     }
 
-
-    @When("the user sends the request to the api")
-    public void theUserSendsTheRequestToTheApi() {
+    @When("the user sends the request to the api with the abbreviation of your country")
+    public void theUserSendsTheRequestToTheApiWithTheAbbreviationOfYourCountry() {
         try {
             actor.attemptsTo(
                     doPostSoap()
-                            .andTheResource(RESOURCE_CAPITAL.getValue())
+                            .andTheResource(RESORUCE_PHONE_CODE.getValue())
                             .withTheHeaders(headers().getHeadersCollection())
                             .andTheBody(body)
             );
@@ -55,15 +54,15 @@ public class CapitalStepDefinitions extends ApiSetUp {
         }
     }
 
-    @Then("the user gets the capital")
-    public void theUserGetsTheCapital() {
+    @Then("the user gets the telephone code")
+    public void theUserGetsTheTelephoneCode() {
         try {
             LOGGER.info(new String(LastResponse.received().answeredBy(actor).asByteArray(), StandardCharsets.UTF_8));
             actor.should(
                     seeThatResponse("el codigo de respuesta es: " + HttpStatus.SC_OK,
                             response -> response.statusCode(HttpStatus.SC_OK)),
-                    seeThat(" la capital es",
-                            responseSoap(), containsString("Bogota"))
+                    seeThat(" el codigo del pais es: ",
+                            responseSoap(), containsString("54"))
             );
             LOGGER.info("CUMPLE");
         } catch (Exception e) {
@@ -74,7 +73,7 @@ public class CapitalStepDefinitions extends ApiSetUp {
     }
 
     private void loadBody() {
-        body = readFile(BODY_PATH.getValue());
-        body = String.format(body, "CO");
+        body = readFile(BODY_PATH_PHONE_CODE.getValue());
+        body = String.format(body, "ARG");
     }
 }

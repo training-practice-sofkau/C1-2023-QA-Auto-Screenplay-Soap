@@ -15,19 +15,19 @@ import static com.sofkau.models.Headers.headers;
 import static com.sofkau.questions.ResponseSoap.responseSoap;
 import static com.sofkau.tasks.DoPostSoap.doPostSoap;
 import static com.sofkau.utils.ManageFile.readFile;
-import static com.sofkau.utils.Path.*;
+import static com.sofkau.utils.PathLanguage.*;
 import static net.serenitybdd.screenplay.GivenWhenThen.seeThat;
 import static net.serenitybdd.screenplay.rest.questions.ResponseConsequence.seeThatResponse;
 import static org.hamcrest.CoreMatchers.containsString;
 
-public class CapitalStepDefinitions extends ApiSetUp {
+public class LanguageStepDefinitions extends ApiSetUp {
     String body;
-    private static final Logger LOGGER = Logger.getLogger(CapitalStepDefinitions.class);
+    private static final Logger LOGGER = Logger.getLogger(LanguageStepDefinitions.class);
 
-    @Given("a user that wants to know the actual capital")
-    public void aUserThatWantsToKnowTheActualCapital() {
+    @Given("that the user has access to the LanguageName service")
+    public void thatTheUserHasAccessToTheLanguageNameService() {
         try {
-            setUp(SOAP_CAPITAL_BASE_URL.getValue());
+            setUp(SOAP_LANGUAGE_URL.getValue());
             LOGGER.info("INICIA LA AUTOMATIZACION");
             loadBody();
         } catch (Exception e) {
@@ -37,13 +37,12 @@ public class CapitalStepDefinitions extends ApiSetUp {
         }
     }
 
-
-    @When("the user sends the request to the api")
-    public void theUserSendsTheRequestToTheApi() {
+    @When("sends a SOAP request with the abbreviation of the desired language")
+    public void sendsASOAPRequestWithTheAbbreviationOfTheDesiredLanguage() {
         try {
             actor.attemptsTo(
                     doPostSoap()
-                            .andTheResource(RESOURCE_CAPITAL.getValue())
+                            .andTheResource(RESORUCE_LANGUAGE.getValue())
                             .withTheHeaders(headers().getHeadersCollection())
                             .andTheBody(body)
             );
@@ -55,15 +54,15 @@ public class CapitalStepDefinitions extends ApiSetUp {
         }
     }
 
-    @Then("the user gets the capital")
-    public void theUserGetsTheCapital() {
+    @Then("you should receive a successful response with the name of the corresponding language")
+    public void youShouldReceiveASuccessfulResponseWithTheNameOfTheCorrespondingLanguage() {
         try {
             LOGGER.info(new String(LastResponse.received().answeredBy(actor).asByteArray(), StandardCharsets.UTF_8));
             actor.should(
                     seeThatResponse("el codigo de respuesta es: " + HttpStatus.SC_OK,
                             response -> response.statusCode(HttpStatus.SC_OK)),
-                    seeThat(" la capital es",
-                            responseSoap(), containsString("Bogota"))
+                    seeThat(" El idioma correspondiente a la solicitud, es: ",
+                            responseSoap(), containsString("Spanish"))
             );
             LOGGER.info("CUMPLE");
         } catch (Exception e) {
@@ -74,7 +73,7 @@ public class CapitalStepDefinitions extends ApiSetUp {
     }
 
     private void loadBody() {
-        body = readFile(BODY_PATH.getValue());
-        body = String.format(body, "CO");
+        body = readFile(BODY_PATH_LANGUAGE.getValue());
+        body = String.format(body, "es");
     }
 }

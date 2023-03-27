@@ -15,19 +15,19 @@ import static com.sofkau.models.Headers.headers;
 import static com.sofkau.questions.ResponseSoap.responseSoap;
 import static com.sofkau.tasks.DoPostSoap.doPostSoap;
 import static com.sofkau.utils.ManageFile.readFile;
-import static com.sofkau.utils.Path.*;
+import static com.sofkau.utils.PathCity.*;
 import static net.serenitybdd.screenplay.GivenWhenThen.seeThat;
 import static net.serenitybdd.screenplay.rest.questions.ResponseConsequence.seeThatResponse;
 import static org.hamcrest.CoreMatchers.containsString;
 
-public class CapitalStepDefinitions extends ApiSetUp {
+public class CityNameStepDefinitions extends ApiSetUp {
     String body;
-    private static final Logger LOGGER = Logger.getLogger(CapitalStepDefinitions.class);
+    private static final Logger LOGGER = Logger.getLogger(CityNameStepDefinitions.class);
 
-    @Given("a user that wants to know the actual capital")
-    public void aUserThatWantsToKnowTheActualCapital() {
+    @Given("that the user has access to the LatLonListCityNames service")
+    public void thatTheUserHasAccessToTheLatLonListCityNamesService() {
         try {
-            setUp(SOAP_CAPITAL_BASE_URL.getValue());
+            setUp(SOAP_CITY_NAME_URL.getValue());
             LOGGER.info("INICIA LA AUTOMATIZACION");
             loadBody();
         } catch (Exception e) {
@@ -37,13 +37,12 @@ public class CapitalStepDefinitions extends ApiSetUp {
         }
     }
 
-
-    @When("the user sends the request to the api")
-    public void theUserSendsTheRequestToTheApi() {
+    @When("send a SOAP request with the latitude and longitude of the desired area")
+    public void sendASOAPRequestWithTheLatitudeAndLongitudeOfTheDesiredArea() {
         try {
             actor.attemptsTo(
                     doPostSoap()
-                            .andTheResource(RESOURCE_CAPITAL.getValue())
+                            .andTheResource(RESORUCE_CITY.getValue())
                             .withTheHeaders(headers().getHeadersCollection())
                             .andTheBody(body)
             );
@@ -55,15 +54,15 @@ public class CapitalStepDefinitions extends ApiSetUp {
         }
     }
 
-    @Then("the user gets the capital")
-    public void theUserGetsTheCapital() {
+    @Then("you should receive a successful response with a list of city names and their geographic coordinates")
+    public void youShouldReceiveASuccessfulResponseWithAListOfCityNamesAndTheirGeographicCoordinates() {
         try {
             LOGGER.info(new String(LastResponse.received().answeredBy(actor).asByteArray(), StandardCharsets.UTF_8));
             actor.should(
                     seeThatResponse("el codigo de respuesta es: " + HttpStatus.SC_OK,
                             response -> response.statusCode(HttpStatus.SC_OK)),
-                    seeThat(" la capital es",
-                            responseSoap(), containsString("Bogota"))
+                    seeThat(" lista de ciudades con sus cordenadas geograficas: ",
+                            responseSoap(), containsString("Kansas City"))
             );
             LOGGER.info("CUMPLE");
         } catch (Exception e) {
@@ -74,7 +73,7 @@ public class CapitalStepDefinitions extends ApiSetUp {
     }
 
     private void loadBody() {
-        body = readFile(BODY_PATH.getValue());
-        body = String.format(body, "CO");
+        body = readFile(BODY_PATH_CITY.getValue());
+        body = String.format(body, "2");
     }
 }

@@ -2,7 +2,7 @@ Feature: Get the actual capital
   AS
     user
   I WANT TO
-   get
+  get the capitals of a given country
   SO THAT
    see capital
 
