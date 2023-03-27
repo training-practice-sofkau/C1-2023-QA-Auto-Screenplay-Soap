@@ -12,10 +12,7 @@ public enum Path {
     BODY_NUMEROS_DOLARES_PATH("src/test/resources/soap/fileNumerosDolars.xml"),
     SOAP_CALCULADORA_BASE_URL("http://www.dneonline.com/"),
     RESOURCE_CALCULADORA("calculator.asmx"),
-    BODY_CALCULADORA_PATH("src/test/resources/soap/fileCalculadora.xml"),
-    SOAP_TEMPERATURA_BASE_URL("http://www.w3schools.com/"),
-    RESOURCE_TEMPERATURA("xml/tempconvert.asmx"),
-    BODY_TEMPERATURA_PATH("src/test/resources/soap/fileTemperaturaConversion.xml");
+    BODY_CALCULADORA_PATH("src/test/resources/soap/fileCalculadora.xml");
 
 
     private String value;

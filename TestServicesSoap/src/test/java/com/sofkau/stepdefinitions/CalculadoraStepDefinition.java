@@ -45,7 +45,7 @@ public class CalculadoraStepDefinition extends ApiSetUp {
             actor.attemptsTo(
                     doPostSoap()
                             .andTheResource(RESOURCE_CALCULADORA.getValue())
-                            .withTheHeaders(headers().getHeadersZipCode())
+                            .withTheHeaders(headers().getHeadersCalculadora())
                             .andTheBody(body)
             );
             LOGGER.info("Realiza la peticion");
@@ -90,7 +90,7 @@ public class CalculadoraStepDefinition extends ApiSetUp {
     }
     private void loadBody() {
         body = readFile(BODY_CALCULADORA_PATH.getValue());
-        body = String.format(body, "5", "3");
+        body = String.format(body, 5, 3);
 
     }
 }

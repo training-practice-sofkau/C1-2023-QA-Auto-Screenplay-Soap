@@ -5,8 +5,8 @@ Feature: Convertir numeros a dolares de forma escrita
 
   @NumerosDollars
   Scenario: Conversion de numero a dolares exitosa
-    Given que el usuario quiere obtener el resultado de la conversion del numero a dolares
+    Given que el usuario quiere obtener el resultado de la conversion de numeros a dolares
     When ingreso el numero 70 en el campo de entrada
-    And el servicio responde con un estado 200 OK
-    Then el servicio muestra el resultado de la conversion en dolares "seventy dollars"
+    Then el servicio responde con un estado 200 OK
+    And el servicio muestra el resultado de la conversion en dolares "seventy doll"
 

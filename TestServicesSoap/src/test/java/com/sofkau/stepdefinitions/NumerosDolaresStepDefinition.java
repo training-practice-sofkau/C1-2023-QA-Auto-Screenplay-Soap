@@ -25,8 +25,8 @@ public class NumerosDolaresStepDefinition extends ApiSetUp {
     String body;
     private static final Logger LOGGER = Logger.getLogger(NumerosDolaresStepDefinition.class);
 
-    @Given("que el usuario quiere obtener el resultado de la conversion del numero a dolares")
-    public void queElUsuarioQuiereObtenerElResultadoDeLaConversionDelNumeroADolares() {
+    @Given("que el usuario quiere obtener el resultado de la conversion de numeros a dolares")
+    public void queElUsuarioQuiereObtenerElResultadoDeLaConversionDeNumerosADolares() {
         try {
             setUp(SOAP_NUMEROS_DOLARES_BASE_URL.getValue());
             LOGGER.info("INICIA LA AUTOMATIZACION");
@@ -45,7 +45,7 @@ public class NumerosDolaresStepDefinition extends ApiSetUp {
             actor.attemptsTo(
                     doPostSoap()
                             .andTheResource(RESOURCE_NUMEROS_DOLARES.getValue())
-                            .withTheHeaders(headers().getHeadersZipCode())
+                            .withTheHeaders(headers().getHeadersNumerosDolares())
                             .andTheBody(body)
             );
             LOGGER.info("Realiza la peticion");
@@ -56,7 +56,7 @@ public class NumerosDolaresStepDefinition extends ApiSetUp {
         }
     }
 
-    @When("el servicio responde con un estado {int} OK")
+    @Then("el servicio responde con un estado {int} OK")
     public void elServicioRespondeConUnEstadoOK(Integer int1) {
         try {
             LOGGER.info(new String(LastResponse.received().answeredBy(actor).asByteArray(), StandardCharsets.UTF_8));
@@ -78,8 +78,10 @@ public class NumerosDolaresStepDefinition extends ApiSetUp {
         try {
             LOGGER.info(new String(LastResponse.received().answeredBy(actor).asByteArray(), StandardCharsets.UTF_8));
             actor.should(
-                    seeThat(" El numero convertido y escrito es: ",
-                            responseSoap(), containsString("seventy dollars"))
+                    seeThatResponse(" el body contiene la respuesta: ",
+                            response -> response.body(containsString("seventy dollars"))
+                    )
+
             );
             LOGGER.info("CUMPLE!!");
         } catch (Exception e) {
