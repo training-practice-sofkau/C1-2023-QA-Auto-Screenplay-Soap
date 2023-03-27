@@ -1,5 +1,4 @@
 package com.sofkau.questions;
-
 import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.Question;
 import net.serenitybdd.screenplay.rest.questions.LastResponse;
