@@ -9,7 +9,8 @@ import org.junit.runner.RunWith;
         snippets = CucumberOptions.SnippetType.CAMELCASE,
         features = {"src/test/resources/features/countryIsoCode.feature"},
         glue = {"com.sofkau.stepdefinitions"},
-        tags = {"not"}
+        tags = {}
+
 )
 public class ConutryIsoCode {
 }

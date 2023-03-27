@@ -9,7 +9,7 @@ import org.junit.runner.RunWith;
         snippets = CucumberOptions.SnippetType.CAMELCASE,
         features = {"src/test/resources/features/numerosadolares.feature"},
         glue = {"com.sofkau.stepdefinitions"},
-        tags = {"@numberoutline"}
+        tags = { }
 )
 public class NumberConversionDollaresTest {
 }

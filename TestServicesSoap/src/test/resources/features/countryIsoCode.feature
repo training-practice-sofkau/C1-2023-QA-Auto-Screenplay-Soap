@@ -6,7 +6,7 @@ Feature: filtrar pais por codigo
   SO THAT
   mirar el iso codigo por pais
 
-  @paisIsoCode
+
   Scenario: buscar pais por iso code
     Given como usuario quiero conocer el iso code asociado al pais
     When envio la peticion a la Api
