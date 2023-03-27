@@ -103,13 +103,13 @@ public class ConversionDollarsStepDefinitions extends ApiSetUp {
         }
     }
 
-    @Then("the user gets the numbers  in dollares in letters {string}")
-    public void theUserGetsTheNumbersInDollaresInLetters(String letters) {
+    @Then("the user gets the numbers  in dollares in letters {string} and get status code {int}")
+    public void theUserGetsTheNumbersInDollaresInLettersAndGetStatusCode(String letters, Integer code) {
         try {
             LOGGER.info(new String(LastResponse.received().answeredBy(actor).asByteArray(), StandardCharsets.UTF_8));
             actor.should(
-                    seeThatResponse("el codigo de respuesta es: " + HttpStatus.SC_OK,
-                            response -> response.statusCode(HttpStatus.SC_OK)),
+                    seeThatResponse("el codigo de respuesta es: " + code,
+                            response -> response.statusCode(code)),
                     seeThat(" El valor en dolares es",
                             responseSoap(), containsString(letters))
             );
