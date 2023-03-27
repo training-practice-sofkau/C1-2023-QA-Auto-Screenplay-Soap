@@ -26,4 +26,23 @@ public class ManageFile {
 
         return stringBuilder.toString();
     }
+
+
+    public static String readFiles(String path1, String path2) {
+        StringBuilder stringBuilder = new StringBuilder();
+        try (BufferedReader br1 = Files.newBufferedReader(Paths.get(path1));
+             BufferedReader br2 = Files.newBufferedReader(Paths.get(path2))) {
+            String line;
+            while ((line = br1.readLine()) != null) {
+                stringBuilder.append(line).append("\n");
+            }
+            while ((line = br2.readLine()) != null) {
+                stringBuilder.append(line).append("\n");
+            }
+        } catch (IOException ioException) {
+            LOGGER.warn("**** tengo problemas con la ruta especificada de los archivos ***");
+            LOGGER.info(ioException.getMessage());
+        }
+        return stringBuilder.toString();
+    }
 }

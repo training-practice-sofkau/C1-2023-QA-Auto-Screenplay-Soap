@@ -22,7 +22,7 @@ import static org.hamcrest.CoreMatchers.containsString;
 
 public class NumbersConversionStepDefinitions extends ApiSetUp {
     String body;
-    private static final Logger LOGGER = Logger.getLogger(CapitalStepDefinitions.class);
+    private static final Logger LOGGER = Logger.getLogger(NumbersConversionStepDefinitions.class);
     @Given("a user who wants to convert numbers to letters")
     public void aUserWhoWantsToConvertNumbersToLetters() {
         try {
