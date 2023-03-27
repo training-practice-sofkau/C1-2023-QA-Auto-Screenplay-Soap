@@ -2,8 +2,8 @@
     <soapenv:Header/>
     <soapenv:Body>
         <tem:Multiply>
-            <tem:intA>2</tem:intA>
-            <tem:intB>5</tem:intB>
+            <tem:intA>%s</tem:intA>
+            <tem:intB>%s</tem:intB>
         </tem:Multiply>
     </soapenv:Body>
 </soapenv:Envelope>
