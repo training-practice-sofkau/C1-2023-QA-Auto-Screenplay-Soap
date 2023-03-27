@@ -36,8 +36,6 @@ public class CountryIsoCodeStepDefinitions extends ApiSetUp {
             LOGGER.warn(e.getMessage());
             Assertions.fail();
         }
-
-
     }
 
     @When("envio la peticion a la Api")
