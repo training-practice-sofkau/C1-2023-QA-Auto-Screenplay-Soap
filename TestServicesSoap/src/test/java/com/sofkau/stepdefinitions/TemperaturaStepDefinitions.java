@@ -40,7 +40,6 @@ public class TemperaturaStepDefinitions extends ApiSetUp {
     @When("the user sends the request to the converion api")
     public void theUserSendsTheRequestToTheConverionApi() {
         try{
-            LOGGER.info(SOAP_TEMPERATURE_BASE_URL.getValue()+RESOURCE_CELCIUS.getValue());
             actor.attemptsTo(
                     doPostSoap().withTheHeaders(headersGrados().getHeadersCollection())
                             .andTheBody(body)
@@ -67,9 +66,27 @@ public class TemperaturaStepDefinitions extends ApiSetUp {
             LOGGER.info("Error al comparar");
             LOGGER.warn(e.getMessage());
             Assertions.fail();
+        }finally {
+            LOGGER.info("| Esperado | Obtenido | Valor |");
+            status();
+            temperatura(string);
         }
     }
+    private void temperatura(String string) {
+        if (LastResponse.received().answeredBy(actor).asString().substring(313,315).equalsIgnoreCase(string))
+            LOGGER.info("| "+ string +" | "+LastResponse.received().answeredBy(actor).asString().substring(313,315)+
+                    " | cumple |");
+        else
+            LOGGER.info("| "+ string +" | "+LastResponse.received().answeredBy(actor).asString().substring(313,315)+
+                    " | no cumple |");
+    }
 
+    private void status() {
+        if(LastResponse.received().answeredBy(actor).statusCode()==HttpStatus.SC_OK)
+            LOGGER.info("| "+HttpStatus.SC_OK+" | "+LastResponse.received().answeredBy(actor).statusCode()+" | cumple |");
+        else
+            LOGGER.info("| "+HttpStatus.SC_OK+" | "+LastResponse.received().answeredBy(actor).statusCode()+" | no cumple |");
+    }
     private void loadBody(Integer int1) {
         body = readFile(TEMPERATURE_BODY_PATH.getValue());
         body = String.format(body, int1);
