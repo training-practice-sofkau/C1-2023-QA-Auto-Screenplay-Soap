@@ -9,7 +9,8 @@ Feature: Conversor de numero SOAP
     Then Se debe visualizar un codigo de estado "200" OK
     And El resultado debe ser la conversion correcta del numero en palabras <word>
     Examples:
-      | num1 | word     |
-      | "8"  | "eigh"   |
-      | "10" | "ten"    |
-      | "12" | "eleven" |
+      | num1  | word             |
+      | "8"   | "eight"          |
+      | "10"  | "ten"            |
+      | "12"  | "twelve"         |
+      | "2.5" | "two point five" |
