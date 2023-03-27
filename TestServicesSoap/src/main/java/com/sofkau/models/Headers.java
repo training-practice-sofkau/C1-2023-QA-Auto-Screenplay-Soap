@@ -1,5 +1,4 @@
 package com.sofkau.models;
-
 import java.util.HashMap;
 import java.util.Map;
 
