@@ -45,6 +45,7 @@ dependencies {
     implementation group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-jsr310', version: '2.11.3'
     implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.13.0'
     implementation 'org.projectlombok:lombok:1.18.22'
+
 }
 
 test {
