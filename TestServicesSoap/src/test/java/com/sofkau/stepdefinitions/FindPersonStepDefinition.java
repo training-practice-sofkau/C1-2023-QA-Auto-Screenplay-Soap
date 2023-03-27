@@ -5,7 +5,6 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import net.serenitybdd.screenplay.rest.questions.LastResponse;
-import org.apache.http.HttpStatus;
 import org.apache.log4j.Logger;
 import org.junit.jupiter.api.Assertions;
 import org.w3c.dom.Document;
@@ -51,8 +50,7 @@ public class FindPersonStepDefinition extends ApiSetUp {
                             .withTheHeaders(headers().getHeadersCollection())
                             .andTheBody(body)
             );
-            LOGGER.info("Realiza la peticion");
-            System.out.println(body);
+            LOGGER.info("Realiza la peticion..." + "\n" + body);
         } catch (Exception e) {
             LOGGER.info(" fallo al momento de realizar la peticion");
             LOGGER.warn(e.getMessage());
@@ -68,6 +66,7 @@ public class FindPersonStepDefinition extends ApiSetUp {
 
         try {
             LOGGER.info(responseBody);
+
             actor.should(
                     seeThatResponse("el codigo de respuesta es: " + code,
                             response -> response.statusCode(code))
@@ -83,9 +82,14 @@ public class FindPersonStepDefinition extends ApiSetUp {
                 String name = XPathFactory.newInstance().newXPath().compile("//Name").evaluate(document);
                 String age = XPathFactory.newInstance().newXPath().compile("//Age").evaluate(document);
 
-                // Mostrar contenido deseado en la consola
+                LOGGER.info("La respuesta obtenia: ");
                 LOGGER.info("Name: " + name);
                 LOGGER.info("Age: " + age);
+
+                actor.should(
+                        seeThat(" El nombre de la persona es:",
+                                responseSoap(), containsString(name)
+                ));
 
                 LOGGER.info("CUMPLE");
             }

@@ -16,10 +16,13 @@ import java.io.ByteArrayInputStream;
 import java.nio.charset.StandardCharsets;
 
 import static com.sofkau.models.Headers.headers;
+import static com.sofkau.questions.ResponseSoap.responseSoap;
 import static com.sofkau.tasks.DoPostSoap.doPostSoap;
 import static com.sofkau.utils.ManageFile.readFile;
 import static com.sofkau.utils.PathFindByName.*;
+import static net.serenitybdd.screenplay.GivenWhenThen.seeThat;
 import static net.serenitybdd.screenplay.rest.questions.ResponseConsequence.seeThatResponse;
+import static org.hamcrest.CoreMatchers.containsString;
 
 public class GetListByNameStepDefinition extends ApiSetUp {
 
@@ -80,9 +83,14 @@ public class GetListByNameStepDefinition extends ApiSetUp {
                 String name = XPathFactory.newInstance().newXPath().compile("//Name").evaluate(document);
                 String ssn = XPathFactory.newInstance().newXPath().compile("//SSN").evaluate(document);
 
-                // Mostrar contenido deseado en la consola
+                LOGGER.info("La respuesta obtenia: ");
                 LOGGER.info("Name: " + name);
                 LOGGER.info("SSN: " + ssn);
+
+                actor.should(
+                        seeThat(" El nombre de la persona es:",
+                                responseSoap(), containsString(name))
+                );
 
                 LOGGER.info("CUMPLE");
             }

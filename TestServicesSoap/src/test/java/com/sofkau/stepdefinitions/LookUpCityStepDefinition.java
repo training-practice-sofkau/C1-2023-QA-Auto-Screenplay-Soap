@@ -16,11 +16,14 @@ import java.io.ByteArrayInputStream;
 import java.nio.charset.StandardCharsets;
 
 import static com.sofkau.models.Headers.headers;
+import static com.sofkau.questions.ResponseSoap.responseSoap;
 import static com.sofkau.tasks.DoPostSoap.doPostSoap;
 import static com.sofkau.utils.LookUpCityPath.*;
 import static com.sofkau.utils.ManageFile.readFile;
 import static com.sofkau.utils.PathFindByName.*;
+import static net.serenitybdd.screenplay.GivenWhenThen.seeThat;
 import static net.serenitybdd.screenplay.rest.questions.ResponseConsequence.seeThatResponse;
+import static org.hamcrest.CoreMatchers.containsString;
 
 public class LookUpCityStepDefinition extends ApiSetUp {
 
@@ -62,6 +65,7 @@ public class LookUpCityStepDefinition extends ApiSetUp {
 
     @Then("the user should receive the city's information and the status code {int}")
     public void theUserShouldReceiveTheCitySInformationAndTheStatusCode(Integer code) {
+
         String responseBody = new String(LastResponse.received().answeredBy(actor).asByteArray(), StandardCharsets.UTF_8);
 
         try {
@@ -81,9 +85,14 @@ public class LookUpCityStepDefinition extends ApiSetUp {
                 String city = XPathFactory.newInstance().newXPath().compile("//City").evaluate(document);
                 String state = XPathFactory.newInstance().newXPath().compile("//State").evaluate(document);
 
-                // Mostrar contenido deseado en la consola
+                LOGGER.info("La respuesta obtenia: ");
                 LOGGER.info("City: " + city);
                 LOGGER.info("State: " + state);
+
+                actor.should(
+                        seeThat(" El nombre de la ciudad es:",
+                                responseSoap(), containsString(city))
+                );
 
                 LOGGER.info("CUMPLE");
             }
