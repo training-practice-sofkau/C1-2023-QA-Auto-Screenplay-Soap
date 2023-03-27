@@ -4,7 +4,6 @@ Feature: Datos de la persona
   Para validar la funcionalidad busqueda
 
 
-  @busquedaPaisCorrecta
   Scenario: busqueda exitosa de persona
     Given el administrador quiere buscar una persona
     When el administrador realiza la peticion de busqueda de la persona por su codigo

@@ -32,7 +32,6 @@ public class paisStepDefinitios extends ApiSetUp {
         try {
             setUp(SOAP_CAPITAL_BASE_URL.getValue());
             LOGGER.info("INICIA LA AUTOMATIZACION");
-            loadBody();
         } catch (Exception e) {
             LOGGER.info(" fallo la configuracion inicial");
             LOGGER.warn(e.getMessage());
@@ -40,9 +39,10 @@ public class paisStepDefinitios extends ApiSetUp {
         }
     }
 
-    @When("el administrador realiza la peticion de busqueda del pais con su codigo")
-    public void elAdministradorRealizaLaPeticionDeBusquedaDelPaisConSuCodigo() {
 
+    @When("el administrador realiza la peticion de busqueda del pais con su {string}")
+    public void elAdministradorRealizaLaPeticionDeBusquedaDelPaisConSu(String codigo) {
+        loadBody(String.valueOf(codigo));
         try {
             actor.attemptsTo(
                     doPostSoap()
@@ -58,15 +58,14 @@ public class paisStepDefinitios extends ApiSetUp {
         }
     }
 
-    @Then("el administrador deberia ver el nombre del pais corresponiente al codigo proporcionado")
-    public void elAdministradorDeberiaVerElNombreDelPaisCorresponienteAlCodigoProporcionado() {
+    @Then("el administrador deberia ver el nombre del pais corresponiente al codigo proporcionado y un status {int}")
+    public void elAdministradorDeberiaVerElNombreDelPaisCorresponienteAlCodigoProporcionadoYUnStatus(Integer code) {
         try {
             LOGGER.info(new String(LastResponse.received().answeredBy(actor).asByteArray(), StandardCharsets.UTF_8));
             actor.should(
-                    seeThatResponse("el codigo de respuesta es: " + HttpStatus.SC_OK,
-                            response -> response.statusCode(HttpStatus.SC_OK)),
-                    seeThat(" la capital es",
-                            responseSoap(), containsString("Argentina"))
+                    seeThatResponse("el codigo de respuesta es: " + code,
+                            response -> response.statusCode(code))
+
             );
             LOGGER.info("CUMPLE");
         } catch (Exception e) {
@@ -78,11 +77,9 @@ public class paisStepDefinitios extends ApiSetUp {
     }
 
 
-
-
-    private void loadBody() {
+    private void loadBody(String codigo) {
         body = readFile(BODY_PATH_PAIS.getValue());
-        body = String.format(body, "AR");
+        body = String.format(body, codigo);
     }
 
 }

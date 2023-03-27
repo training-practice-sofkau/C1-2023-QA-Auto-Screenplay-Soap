@@ -4,9 +4,13 @@ Feature: Nombre del país
   Para validar la funcionalidad busqueda su código de pais
 
   @busquedaPaisCorrecta
-  Scenario: busqueda exitosa de pais
+  Scenario Outline: busqueda exitosa de pais
     Given el administrador quiere buscar un pais por el codigo internacional corresondiente
-    When el administrador realiza la peticion de busqueda del pais con su codigo
-    Then el administrador deberia ver el nombre del pais corresponiente al codigo proporcionado
+    When el administrador realiza la peticion de busqueda del pais con su <codigo>
+    Then el administrador deberia ver el nombre del pais corresponiente al codigo proporcionado y un status <code>
+    Examples:
+      | codigo | code |
+      | "CO"   | 200  |
+      | "AR"   | 200  |
 
 
