@@ -4,12 +4,14 @@ import com.sofkau.setup.ApiSetUp;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import io.cucumber.java.eo.Do;
 import net.serenitybdd.screenplay.rest.questions.LastResponse;
 import org.apache.http.HttpStatus;
 import org.apache.log4j.Logger;
 import org.junit.jupiter.api.Assertions;
 
 import java.nio.charset.StandardCharsets;
+
 
 import static com.sofkau.models.Headers.headers;
 import static com.sofkau.questions.ResponseSoap.responseSoap;
@@ -20,64 +22,60 @@ import static net.serenitybdd.screenplay.GivenWhenThen.seeThat;
 import static net.serenitybdd.screenplay.rest.questions.ResponseConsequence.seeThatResponse;
 import static org.hamcrest.CoreMatchers.containsString;
 
-public class CapitalStepDefinitions extends ApiSetUp {
-    String body;
-    private static final Logger LOGGER = Logger.getLogger(CapitalStepDefinitions.class);
+public class MultiplicarStepDefinitions extends ApiSetUp {
 
-    @Given("a user that wants to know the actual capital")
-    public void aUserThatWantsToKnowTheActualCapital() {
-        try {
-            setUp(SOAP_CAPITAL_BASE_URL.getValue());
+    private static final Logger LOGGER = Logger.getLogger(MultiplicarStepDefinitions.class);
+    String body;
+
+    private void loadBody(String num1,String num2) {
+        body = readFile(BODY_MULTIPLICAR.getValue());
+        body = String.format(body, Integer.parseInt(num1), Integer.parseInt(num2));
+    }
+    @Given("que estoy apuntando con un endpoint a la api de la calculadora")
+    public void queEstoyApuntandoConUnEndpointALaApiDeLaCalculadora() {
+        try{
+            setUp(SOAP_CALCULADORA_BASE_URL.getValue());
             LOGGER.info("INICIA LA AUTOMATIZACION");
-            loadBody();
-        } catch (Exception e) {
+        }catch (Exception e){
             LOGGER.info(" fallo la configuracion inicial");
             LOGGER.warn(e.getMessage());
             Assertions.fail();
         }
-
     }
 
+    @When("envio la peticion post con el {string} y el {string}")
+    public void envioLaPeticionPostConElYEl(String num1, String num2) {
+        loadBody(num1,num2);
+        try{
 
-    @When("the user sends the request to the api")
-    public void theUserSendsTheRequestToTheApi() {
-        try {
             actor.attemptsTo(
                     doPostSoap()
-                            .andTheResource(RESOURCE_CAPITAL.getValue())
-                            .withTheHeaders(headers().getHeadersCollection())
+                            .andTheResource(RESOURCE_CALCULADORA_MULTIPLICAR.getValue())
+                            .withTheHeaders(headers().getHeadersCollectionCalculadora())
                             .andTheBody(body)
             );
-            LOGGER.info("Realiza la peticion");
-        } catch (Exception e) {
+        }catch (Exception e){
             LOGGER.info(" fallo al momento de realizar la peticion");
             LOGGER.warn(e.getMessage());
             Assertions.fail();
         }
-
     }
 
-    @Then("the user gets the capital")
-    public void theUserGetsTheCapital() {
+    @Then("recibo {int} de codigo de respuesta y el {string} de la multiplicacion")
+    public void reciboDeCodigoDeRespuestaYElDeLaMultiplicacion(Integer code, String resultado) {
         try {
             LOGGER.info(new String(LastResponse.received().answeredBy(actor).asByteArray(), StandardCharsets.UTF_8));
             actor.should(
                     seeThatResponse("el codigo de respuesta es: " + HttpStatus.SC_OK,
-                            response -> response.statusCode(HttpStatus.SC_OK)),
-                    seeThat(" la capital es",
-                            responseSoap(), containsString("Bogota"))
+                            response -> response.statusCode(code)),
+                    seeThat(" El resultado es",
+                            responseSoap(), containsString(resultado))
             );
-            LOGGER.info("CUMPLE");
-        } catch (Exception e) {
-            LOGGER.info("Error al realizar la comparacion");
+
+        }catch (Exception e){
             LOGGER.warn(e.getMessage());
+            LOGGER.info("Error al realizar la comparacion");
             Assertions.fail();
         }
-
     }
-
-        private void loadBody() {
-            body = readFile(BODY_PATH.getValue());
-            body = String.format(body, "CO");
-        }
 }

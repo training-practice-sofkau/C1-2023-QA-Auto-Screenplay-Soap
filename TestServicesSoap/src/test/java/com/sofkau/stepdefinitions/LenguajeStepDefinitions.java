@@ -1,5 +1,4 @@
 package com.sofkau.stepdefinitions;
-
 import com.sofkau.setup.ApiSetUp;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -20,64 +19,58 @@ import static net.serenitybdd.screenplay.GivenWhenThen.seeThat;
 import static net.serenitybdd.screenplay.rest.questions.ResponseConsequence.seeThatResponse;
 import static org.hamcrest.CoreMatchers.containsString;
 
-public class CapitalStepDefinitions extends ApiSetUp {
+public class LenguajeStepDefinitions extends ApiSetUp {
+    private static final Logger LOGGER = Logger.getLogger(LenguajeStepDefinitions.class);
     String body;
-    private static final Logger LOGGER = Logger.getLogger(CapitalStepDefinitions.class);
 
-    @Given("a user that wants to know the actual capital")
-    public void aUserThatWantsToKnowTheActualCapital() {
-        try {
+    private void loadBody(String codigoL) {
+        body = readFile(BODY_PATH_LENGUAJE.getValue());
+        body = String.format(body, codigoL);
+    }
+    @Given("que estoy apuntando con un endpoint a la api SOAP de paises")
+    public void queEstoyApuntandoConUnEndpointALaApiSOAPDePaises() {
+        try{
             setUp(SOAP_CAPITAL_BASE_URL.getValue());
             LOGGER.info("INICIA LA AUTOMATIZACION");
-            loadBody();
-        } catch (Exception e) {
+        }catch (Exception e){
             LOGGER.info(" fallo la configuracion inicial");
             LOGGER.warn(e.getMessage());
             Assertions.fail();
         }
-
     }
 
-
-    @When("the user sends the request to the api")
-    public void theUserSendsTheRequestToTheApi() {
-        try {
+    @When("envio la peticion post con el {string} del lenguaje de un pais")
+    public void envioLaPeticionPostConElDelLenguajeDeUnPais(String codigoLenguaje) {
+        try{
+            loadBody(codigoLenguaje);
             actor.attemptsTo(
                     doPostSoap()
-                            .andTheResource(RESOURCE_CAPITAL.getValue())
+                            .andTheResource(RESOURCE_LENGUAJE.getValue())
                             .withTheHeaders(headers().getHeadersCollection())
                             .andTheBody(body)
             );
-            LOGGER.info("Realiza la peticion");
-        } catch (Exception e) {
+        }catch (Exception e){
             LOGGER.info(" fallo al momento de realizar la peticion");
             LOGGER.warn(e.getMessage());
             Assertions.fail();
         }
-
     }
 
-    @Then("the user gets the capital")
-    public void theUserGetsTheCapital() {
+    @Then("recibo {int} de codigo de respuesta y el {string} del lenguaje")
+    public void reciboDeCodigoDeRespuestaYElDelLenguaje(Integer codigo, String respuesta) {
         try {
             LOGGER.info(new String(LastResponse.received().answeredBy(actor).asByteArray(), StandardCharsets.UTF_8));
             actor.should(
                     seeThatResponse("el codigo de respuesta es: " + HttpStatus.SC_OK,
-                            response -> response.statusCode(HttpStatus.SC_OK)),
-                    seeThat(" la capital es",
-                            responseSoap(), containsString("Bogota"))
+                            response -> response.statusCode(codigo)),
+                    seeThat(" la moneda es",
+                            responseSoap(), containsString(respuesta))
             );
-            LOGGER.info("CUMPLE");
-        } catch (Exception e) {
-            LOGGER.info("Error al realizar la comparacion");
+
+        }catch (Exception e){
             LOGGER.warn(e.getMessage());
+            LOGGER.info("Error al realizar la comparacion");
             Assertions.fail();
         }
-
     }
-
-        private void loadBody() {
-            body = readFile(BODY_PATH.getValue());
-            body = String.format(body, "CO");
-        }
 }
