@@ -1,0 +1,9 @@
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:web="http://www.dataaccess.com/webservicesserver/">
+    <soapenv:Header/>
+    <soapenv:Body>
+        <web:TitleCaseWordsWithToken>
+            <web:sText>%s</web:sText>
+            <web:sToken> </web:sToken>
+        </web:TitleCaseWordsWithToken>
+    </soapenv:Body>
+</soapenv:Envelope>

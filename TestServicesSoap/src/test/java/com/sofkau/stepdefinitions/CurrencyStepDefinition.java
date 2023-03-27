@@ -20,16 +20,17 @@ import static net.serenitybdd.screenplay.GivenWhenThen.seeThat;
 import static net.serenitybdd.screenplay.rest.questions.ResponseConsequence.seeThatResponse;
 import static org.hamcrest.CoreMatchers.containsString;
 
-public class CapitalStepDefinitions extends ApiSetUp {
-    String body;
-    private static final Logger LOGGER = Logger.getLogger(CapitalStepDefinitions.class);
+public class CurrencyStepDefinition extends ApiSetUp {
 
-    @Given("a user that wants to know the actual capital")
-    public void aUserThatWantsToKnowTheActualCapital() {
+    String body;
+    private static final Logger LOGGER = Logger.getLogger(CurrencyStepDefinition.class);
+
+    @Given("a user have the code of the country {string}")
+    public void aUserHaveTheCodeOfTheCountry(String code) {
         try {
-            setUp(SOAP_CAPITAL_BASE_URL.getValue());
+            setUp(SOAP_CURRECNCY_BASE_URL.getValue());
             LOGGER.info("INICIA LA AUTOMATIZACION");
-            loadBody();
+            loadBody(code);
         } catch (Exception e) {
             LOGGER.info(" fallo la configuracion inicial");
             LOGGER.warn(e.getMessage());
@@ -37,13 +38,12 @@ public class CapitalStepDefinitions extends ApiSetUp {
         }
     }
 
-
-    @When("the user sends the request to the api")
-    public void theUserSendsTheRequestToTheApi() {
+    @When("the user sends the code to the api")
+    public void theUserSendsTheCodeToTheApi() {
         try {
             actor.attemptsTo(
                     doPostSoap()
-                            .andTheResource(RESOURCE_CAPITAL.getValue())
+                            .andTheResource(SOAP_CURRENCY_RESOURCE.getValue())
                             .withTheHeaders(headers().getHeadersCollection())
                             .andTheBody(body)
             );
@@ -54,16 +54,15 @@ public class CapitalStepDefinitions extends ApiSetUp {
             Assertions.fail();
         }
     }
-
-    @Then("the user gets the capital")
-    public void theUserGetsTheCapital() {
+    @Then("the user gets the currency of the country {string}")
+    public void theUserGetsTheCurrencyOfTheCountry(String result) {
         try {
             LOGGER.info(new String(LastResponse.received().answeredBy(actor).asByteArray(), StandardCharsets.UTF_8));
             actor.should(
                     seeThatResponse("el codigo de respuesta es: " + HttpStatus.SC_OK,
                             response -> response.statusCode(HttpStatus.SC_OK)),
-                    seeThat(" la capital es",
-                            responseSoap(), containsString("Bogota"))
+                    seeThat("La divisa es:",
+                            responseSoap(), containsString(result))
             );
             LOGGER.info("CUMPLE");
         } catch (Exception e) {
@@ -73,8 +72,8 @@ public class CapitalStepDefinitions extends ApiSetUp {
         }
     }
 
-    private void loadBody() {
-        body = readFile(BODY_PATH.getValue());
-        body = String.format(body, "CO");
+    private void loadBody(String value) {
+        body = readFile(BODY_PATH_CURRENCY.getValue());
+        body = String.format(body, value);
     }
 }

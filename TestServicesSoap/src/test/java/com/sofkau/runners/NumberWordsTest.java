@@ -9,7 +9,7 @@ import org.junit.runner.RunWith;
         snippets = CucumberOptions.SnippetType.CAMELCASE,
         features = {"src/test/resources/features"},
         glue = {"com.sofkau.stepdefinitions"},
-        tags = {"@capital"}
+        tags = {"@NumberToWords"}
 )
-public class CapitalTest {
+public class NumberWordsTest {
 }
