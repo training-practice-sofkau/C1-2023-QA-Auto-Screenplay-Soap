@@ -6,7 +6,7 @@ Feature: Convert number to dollares
   SO THAT
   see numbers in dollares letters
 
-  @numbersInletters
+  @numbersInDollares
   Scenario Outline: numbers in dollares letteres
     Given a user that wants to know the numbers <numbers> in dollares letters
     When the user sends the request whit numbers to the api  Conversion dollares
