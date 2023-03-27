@@ -20,7 +20,7 @@ public class ManageFile {
                 stringBuilder.append(line+"\n");
 
         }catch (IOException ioException){
-            LOGGER.warn(" **** tengo problemas con la ruta especificada de los archivos***");
+            LOGGER.warn(" **** tengo problemas con la ruta especificada de los archivos ***");
             LOGGER.info(ioException.getMessage());
         }
 
