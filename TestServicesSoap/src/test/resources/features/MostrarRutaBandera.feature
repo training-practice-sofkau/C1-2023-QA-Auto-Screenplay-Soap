@@ -18,4 +18,5 @@ Feature: Consultar bandera de un país
       | "arg"     | "http://www.oorsprong.org/WebSamples.CountryInfo/Flags/Argentina.jpg" | 200    |
       | "OOO"     | "Country not found in the database"                                   | 404    |
       | ""        | "Country not found in the database"                                   | 404    |
+      | "12"      | "Country not found in the database"                                   | 404    |
 
