@@ -20,17 +20,15 @@ import static net.serenitybdd.screenplay.GivenWhenThen.seeThat;
 import static net.serenitybdd.screenplay.rest.questions.ResponseConsequence.seeThatResponse;
 import static org.hamcrest.CoreMatchers.containsString;
 
-public class NumberToWordStepDefinitions extends ApiSetUp {
+public class CurrencyNameStepDefinitions extends ApiSetUp {
 
     String body;
     private static final Logger LOGGER = Logger.getLogger(NumberToWordStepDefinitions.class);
-    @Given("Tengo un numero que quiero convertir {string}")
-    public void tengoUnNumeroQueQuieroConvertir(String num1) {
-
+    @Given("Dado que tengo acceso al servicio SOAP de Listar las monedas de cada pais")
+    public void dadoQueTengoAccesoAlServicioSOAPDeListarLasMonedasDeCadaPais() {
         try {
-            setUp(NUMBERTOWORD_BASE_URL.getValue());
-            LOGGER.info("Inicio de la Automatizacion");
-            loadBody(num1);
+            setUp(SOAP_CAPITAL_BASE_URL.getValue());
+            LOGGER.info("INICIA LA AUTOMATIZACION");
         } catch (Exception e) {
             LOGGER.info(" fallo la configuracion inicial");
             LOGGER.warn(e.getMessage());
@@ -38,17 +36,27 @@ public class NumberToWordStepDefinitions extends ApiSetUp {
         }
     }
 
-    @When("Hago una peticion POST que convierta el numero")
-    public void hagoUnaPeticionPOSTQueConviertaElNumero() {
+    @Given("que he ingresado el codigo ISO de un pais valido {string}")
+    public void queHeIngresadoElCodigoISODeUnPaisValido(String code) {
+        try {
+            LOGGER.info("SE CARGA EL BODY");
+            loadBody(code);
+        } catch (Exception e) {
+            LOGGER.info(" fallo la carga del body");
+            LOGGER.warn(e.getMessage());
+            Assertions.fail();
+        }
+    }
 
+    @When("realizo la solicitud de las monedas correspondientes")
+    public void realizoLaSolicitudDeLasMonedasCorrespondientes() {
         try {
             actor.attemptsTo(
                     doPostSoap()
-                            .andTheResource(RESORUCE_NUMBERTOWORD.getValue())
+                            .andTheResource(RESOURCE_CAPITAL.getValue())
                             .withTheHeaders(headers().getHeadersCollection())
                             .andTheBody(body)
             );
-            LOGGER.info(body);
             LOGGER.info("Realiza la peticion");
         } catch (Exception e) {
             LOGGER.info(" fallo al momento de realizar la peticion");
@@ -57,8 +65,8 @@ public class NumberToWordStepDefinitions extends ApiSetUp {
         }
     }
 
-    @Then("Se debe visualizar un codigo de estado \"200\" OK")
-    public void seDebeVisualizarUnCodigoDeEstadoOK() {
+    @Then("obtengo un codigo de estado exitoso")
+    public void obtengoUnCodigoDeEstadoExitoso() {
         try {
             LOGGER.info(new String(LastResponse.received().answeredBy(actor).asByteArray(), StandardCharsets.UTF_8));
             actor.should(
@@ -73,12 +81,12 @@ public class NumberToWordStepDefinitions extends ApiSetUp {
         }
     }
 
-    @Then("El resultado debe ser la conversion correcta del numero en palabras {string}")
-    public void elResultadoDebeSerLaConversionCorrectaDelNumeroEnPalabras(String word) {
+    @Then("El nombre de la moneda correspondiente {string}")
+    public void elNombreDeLaMonedaCorrespondiente(String word) {
         try {
             LOGGER.info(new String(LastResponse.received().answeredBy(actor).asByteArray(), StandardCharsets.UTF_8));
             actor.should(
-                    seeThat("La conversion del numero es: ",
+                    seeThat(" El nombre de la moneda es",
                             responseSoap(), containsString(word))
             );
             LOGGER.info("CUMPLE");
@@ -88,8 +96,9 @@ public class NumberToWordStepDefinitions extends ApiSetUp {
             Assertions.fail();
         }
     }
+
     private void loadBody(String num1) {
-        body = readFile(BODY_NUMBERTOWORD_PATH.getValue());
+        body = readFile(BODY_CURRENCY_PATH.getValue());
         body = String.format(body, num1);
     }
 }

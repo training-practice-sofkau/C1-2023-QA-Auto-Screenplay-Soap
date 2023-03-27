@@ -10,7 +10,8 @@ public enum Path {
 
     NUMBERTOWORD_BASE_URL("https://www.dataaccess.com"),
     RESORUCE_NUMBERTOWORD("/webservicesserver/numberconversion.wso"),
-    BODY_NUMBERTOWORD_PATH("src/test/resources/soap/numbertoword.xml");
+    BODY_NUMBERTOWORD_PATH("src/test/resources/soap/numbertoword.xml"),
+    BODY_CURRENCY_PATH("src/test/resources/soap/filecurrency.xml");
     private String value;
 
     Path(String value) {
