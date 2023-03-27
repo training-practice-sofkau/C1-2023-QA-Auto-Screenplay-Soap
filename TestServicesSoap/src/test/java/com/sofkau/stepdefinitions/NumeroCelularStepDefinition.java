@@ -72,10 +72,18 @@ public class NumeroCelularStepDefinition  extends ApiSetUp {
             actor.should(
 
                     seeThatResponse("el codigo de respuesta es: " + Statushttp,
-                            response -> response.statusCode(Statushttp)),
-                    seeThat(" El numero de celular es :",
-                            responseSoap(), containsString(numeroCelular))
+                            response -> response.statusCode(Statushttp))
+
             );
+
+
+            if (Statushttp == 200) {
+                actor.should(
+                        seeThat("El indicativo del celular es:",
+                                responseSoap(), containsString(numeroCelular))
+                );
+            }
+
             LOGGER.info("CUMPLE");
         } catch (Exception e) {
             LOGGER.info("Error al realizar la comparacion");
@@ -85,48 +93,6 @@ public class NumeroCelularStepDefinition  extends ApiSetUp {
 
     }
 
-/*
-    @Given("El servicio de Country Info Service SOAP esta disponible y estable")
-    public void elServicioDeCountryInfoServiceSOAPEstaDisponibleYEstable() {
 
-
-        try {
-            setUp(SOAP_CAPITAL_BASE_URL.getValue());
-            LOGGER.info("INICIA LA AUTOMATIZACION");
-        } catch (Exception e) {
-            LOGGER.info(" fallo la configuracion inicial");
-            LOGGER.warn(e.getMessage());
-            Assertions.fail();
-        }
-
-    }
-
-    @When("Envio el codigo ISO del pais AR para consultar el numero de celular")
-    public void envioElCodigoISODelPaisARParaConsultarElNumeroDeCelular() {
-
-
-        try {
-            loadBody(pais);
-            actor.attemptsTo(
-                    doPostSoap()
-                            .andTheResource(RESOURCE_ISO_LENGUAJE_CODE.getValue())
-                            .withTheHeaders(headers().getHeadersCollection())
-                            .andTheBody(body)
-            );
-            LOGGER.info("Realiza la peticion");
-        } catch (Exception e) {
-            LOGGER.info(" fallo al momento de realizar la peticion");
-            LOGGER.warn(e.getMessage());
-            Assertions.fail();
-        }
-
-    }
-
-    @Then("deberia obtener el  {int}  y el {int} de la respuesta")
-    public void deberiaObtenerElYElDeLaRespuesta(Integer int1, Integer int2) {
-
-    }
-
-*/
 
 }

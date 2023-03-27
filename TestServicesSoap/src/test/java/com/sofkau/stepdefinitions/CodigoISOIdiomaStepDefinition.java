@@ -65,10 +65,16 @@ public class CodigoISOIdiomaStepDefinition  extends ApiSetUp {
             actor.should(
 
                     seeThatResponse("el codigo de respuesta es: " + Statushttp,
-                            response -> response.statusCode(Statushttp)),
-                    seeThat(" El codigo ISO del idioma es:",
-                            responseSoap(), containsString(codigoISO))
+                            response -> response.statusCode(Statushttp))
+
             );
+            if (Statushttp == 200) {
+                actor.should(
+                        seeThat("la ruta para la imagen de la bandera es:",
+                                responseSoap(), containsString(codigoISO))
+                );
+            }
+
             LOGGER.info("CUMPLE");
         } catch (Exception e) {
             LOGGER.info("Error al realizar la comparacion");

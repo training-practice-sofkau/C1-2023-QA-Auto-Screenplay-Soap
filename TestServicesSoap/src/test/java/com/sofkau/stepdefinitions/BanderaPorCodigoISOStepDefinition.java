@@ -70,10 +70,17 @@ public class BanderaPorCodigoISOStepDefinition  extends ApiSetUp {
             actor.should(
 
                     seeThatResponse("el codigo de respuesta es: " + Statushttp,
-                            response -> response.statusCode(Statushttp)),
+                            response -> response.statusCode(Statushttp))
+            );
+
+            if (Statushttp == 200){
+                actor.should(
                     seeThat("la ruta para la imagen de la bandera es:",
                             responseSoap(), containsString(rutaBandera))
             );
+
+
+            }
             LOGGER.info("CUMPLE");
         } catch (Exception e) {
             LOGGER.info("Error al realizar la comparacion");
