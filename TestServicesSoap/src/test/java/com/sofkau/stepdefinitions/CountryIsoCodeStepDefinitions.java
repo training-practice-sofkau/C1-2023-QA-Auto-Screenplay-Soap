@@ -16,18 +16,19 @@ import static com.sofkau.questions.ResponseSoap.responseSoap;
 import static com.sofkau.tasks.DoPostSoap.doPostSoap;
 import static com.sofkau.utils.ManageFile.readFile;
 import static com.sofkau.utils.Path.*;
-import static com.sofkau.utils.PathNumberConversion.*;
+import static com.sofkau.utils.PathIsoCode.*;
 import static net.serenitybdd.screenplay.GivenWhenThen.seeThat;
 import static net.serenitybdd.screenplay.rest.questions.ResponseConsequence.seeThatResponse;
 import static org.hamcrest.CoreMatchers.containsString;
 
-public class NumbersLettersStepDefinitions extends ApiSetUp {
+public class CountryIsoCodeStepDefinitions extends ApiSetUp {
     String body;
     private static final Logger LOGGER = Logger.getLogger(NumbersLettersStepDefinitions.class);
-    @Given("a user that wants to know the numbers in letters")
-    public void aUserThatWantsToKnowTheNumbersInLetters() {
+
+    @Given("como usuario quiero conocer el iso code asociado al pais")
+    public void comoUsuarioQuieroConocerElIsoCodeAsociadoAlPais() {
         try {
-            setUp(SOAP_NUMBER_CONVERSION_BASE_URL.getValue());
+            setUp(SOAP_ISOCODE_BASE_URL.getValue());
             LOGGER.info("INICIA LA AUTOMATIZACION");
             loadBody();
         } catch (Exception e) {
@@ -35,14 +36,16 @@ public class NumbersLettersStepDefinitions extends ApiSetUp {
             LOGGER.warn(e.getMessage());
             Assertions.fail();
         }
+
+
     }
 
-    @When("the user sends the request to the api Number Conversion Service")
-    public void theUserSendsTheRequestToTheApiNumberConversionService() {
+    @When("envio la peticion a la Api")
+    public void envioLaPeticionALaApi() {
         try {
             actor.attemptsTo(
                     doPostSoap()
-                            .andTheResource(RESOURCE_NUMBER_CONVERSION.getValue())
+                            .andTheResource(RESOURCE_ISOCODE.getValue())
                             .withTheHeaders(headers().getHeadersCollection())
                             .andTheBody(body)
             );
@@ -54,15 +57,15 @@ public class NumbersLettersStepDefinitions extends ApiSetUp {
         }
     }
 
-    @Then("the user gets the numbers in letteres")
-    public void theUserGetsTheNumbersInLetteres() {
+    @Then("mostrara el pais con el iso code")
+    public void mostraraElPaisConElIsoCode() {
         try {
             LOGGER.info(new String(LastResponse.received().answeredBy(actor).asByteArray(), StandardCharsets.UTF_8));
             actor.should(
                     seeThatResponse("el codigo de respuesta es: " + HttpStatus.SC_OK,
                             response -> response.statusCode(HttpStatus.SC_OK)),
-                    seeThat(" El valor en letras es",
-                            responseSoap(), containsString("one"))
+                    seeThat("El codigo es",
+                            responseSoap(), containsString("ach"))
             );
             LOGGER.info("CUMPLE");
         } catch (Exception e) {
@@ -72,8 +75,8 @@ public class NumbersLettersStepDefinitions extends ApiSetUp {
         }
     }
     private void loadBody() {
-
-        body = readFile(BODY_PATH_NUMBER_CONVERSION.getValue());
-        body = String.format(body, "1");
+        body = readFile(BODY_PATH_ISOCODE.getValue());
+        body = String.format(body, "Acoli");
     }
+
 }
