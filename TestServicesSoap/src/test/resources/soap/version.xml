@@ -1,9 +1,0 @@
-<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:cur="http://webservices.cloanto.com/currencyserver/">
-    <soapenv:Header/>
-    <soapenv:Body>
-        <cur:Version>
-            <!--Optional:-->
-            <cur:licenseKey>%s</cur:licenseKey>
-        </cur:Version>
-    </soapenv:Body>
-</soapenv:Envelope>
