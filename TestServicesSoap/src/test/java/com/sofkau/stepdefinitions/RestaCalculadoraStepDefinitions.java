@@ -12,22 +12,23 @@ import org.junit.jupiter.api.Assertions;
 import java.nio.charset.StandardCharsets;
 
 import static com.sofkau.models.Headers.headers;
+import static com.sofkau.models.HeadersResta.headersResta;
 import static com.sofkau.questions.ResponseSoap.responseSoap;
 import static com.sofkau.tasks.DoPostSoap.doPostSoap;
 import static com.sofkau.utils.ManageFile.readFile;
-import static com.sofkau.utils.PathLanguage.*;
+import static com.sofkau.utils.RestaCalculadora.*;
 import static net.serenitybdd.screenplay.GivenWhenThen.seeThat;
 import static net.serenitybdd.screenplay.rest.questions.ResponseConsequence.seeThatResponse;
 import static org.hamcrest.CoreMatchers.containsString;
 
-public class LanguageStepDefinitions extends ApiSetUp {
+public class RestaCalculadoraStepDefinitions extends ApiSetUp {
     String body;
-    private static final Logger LOGGER = Logger.getLogger(LanguageStepDefinitions.class);
+    private static final Logger LOGGER = Logger.getLogger(RestaCalculadoraStepDefinitions.class);
 
-    @Given("that the user has access to the LanguageName service")
-    public void thatTheUserHasAccessToTheLanguageNameService() {
+    @Given("that the user has access to the subtraction service of the calculator")
+    public void thatTheUserHasAccessToTheSubtractionServiceOfTheCalculator() {
         try {
-            setUp(SOAP_LANGUAGE_URL.getValue());
+            setUp(SOAP_RESTA_CALCULADORA_URL.getValue());
             LOGGER.info("INICIA LA AUTOMATIZACION");
             loadBody();
         } catch (Exception e) {
@@ -37,13 +38,13 @@ public class LanguageStepDefinitions extends ApiSetUp {
         }
     }
 
-    @When("sends a SOAP request with the abbreviation of the desired language")
-    public void sendsASOAPRequestWithTheAbbreviationOfTheDesiredLanguage() {
+    @When("sends a subtraction request with two integers")
+    public void sendsASubtractionRequestWithTwoIntegers() {
         try {
             actor.attemptsTo(
                     doPostSoap()
-                            .andTheResource(RESORUCE_LANGUAGE.getValue())
-                            .withTheHeaders(headers().getHeadersCollection())
+                            .andTheResource(RESORUCE_RESTA_CALCULADORA.getValue())
+                            .withTheHeaders(headersResta().getHeadersCollection())
                             .andTheBody(body)
             );
             LOGGER.info("Realiza la peticion");
@@ -54,15 +55,15 @@ public class LanguageStepDefinitions extends ApiSetUp {
         }
     }
 
-    @Then("you should receive a successful response with the name of the corresponding language")
-    public void youShouldReceiveASuccessfulResponseWithTheNameOfTheCorrespondingLanguage() {
+    @Then("should receive a successful response with the result of the subtraction")
+    public void shouldReceiveASuccessfulResponseWithTheResultOfTheSubtraction() {
         try {
             LOGGER.info(new String(LastResponse.received().answeredBy(actor).asByteArray(), StandardCharsets.UTF_8));
             actor.should(
                     seeThatResponse("el codigo de respuesta es: " + HttpStatus.SC_OK,
                             response -> response.statusCode(HttpStatus.SC_OK)),
-                    seeThat(" El idioma correspondiente a la solicitud, es: ",
-                            responseSoap(), containsString("Spanish"))
+                    seeThat(" El resultado de la resta es: ",
+                            responseSoap(), containsString("22"))
             );
             LOGGER.info("CUMPLE");
         } catch (Exception e) {
@@ -73,7 +74,7 @@ public class LanguageStepDefinitions extends ApiSetUp {
     }
 
     private void loadBody() {
-        body = readFile(BODY_PATH_LANGUAGE.getValue());
-        body = String.format(body, "es");
+        body = readFile(BODY_PATH_RESTA_CALCULADORA.getValue());
+        body = String.format(body, "30", "8");
     }
 }

@@ -15,8 +15,6 @@ import static com.sofkau.models.Headers.headers;
 import static com.sofkau.questions.ResponseSoap.responseSoap;
 import static com.sofkau.tasks.DoPostSoap.doPostSoap;
 import static com.sofkau.utils.ManageFile.readFile;
-import static com.sofkau.utils.PathCity.RESORUCE_CITY;
-import static com.sofkau.utils.PathCity.SOAP_CITY_NAME_URL;
 import static com.sofkau.utils.PhoneCode.*;
 import static net.serenitybdd.screenplay.GivenWhenThen.seeThat;
 import static net.serenitybdd.screenplay.rest.questions.ResponseConsequence.seeThatResponse;
