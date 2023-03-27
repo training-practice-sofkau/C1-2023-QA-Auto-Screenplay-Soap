@@ -9,6 +9,8 @@ public enum Path {
     BODY_PATH_ISO_CODE("src/test/resources/soap/filecodigoISOidioma.xml"),
 
     BODY_PATH_ISO_BANDERA("src/test/resources/soap/filecodigoISObandera.xml"),
+
+    BODY_PATH_ISO_NUMERO_CELULAR  ("src/test/resources/soap/filecodigoISOnumerocelular.xml"),
     BODY_PATH("src/test/resources/soap/filecapital.xml");
 
     private String value;

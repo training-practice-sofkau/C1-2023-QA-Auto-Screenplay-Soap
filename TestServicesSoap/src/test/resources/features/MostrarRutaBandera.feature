@@ -11,8 +11,11 @@ Feature: Consultar bandera de un país
     Examples:
       | codigoISO | bandera                                                               | status |
       | "COL"     | "http://www.oorsprong.org/WebSamples.CountryInfo/Flags/Colombia.jpg"  | 200    |
+      | "col"     | "http://www.oorsprong.org/WebSamples.CountryInfo/Flags/Colombia.jpg"  | 200    |
       | "USA"     | "http://www.oorsprong.org/WebSamples.CountryInfo/Flags/USA.jpg"       | 200    |
+      | "usa"     | "http://www.oorsprong.org/WebSamples.CountryInfo/Flags/USA.jpg"       | 200    |
       | "ARG"     | "http://www.oorsprong.org/WebSamples.CountryInfo/Flags/Argentina.jpg" | 200    |
+      | "arg"     | "http://www.oorsprong.org/WebSamples.CountryInfo/Flags/Argentina.jpg" | 200    |
       | "OOO"     | "Country not found in the database"                                   | 404    |
       | ""        | "Country not found in the database"                                   | 404    |
 
