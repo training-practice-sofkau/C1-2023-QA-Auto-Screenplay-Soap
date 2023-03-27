@@ -3,8 +3,9 @@ package com.sofkau.utils;
 public enum Path {
     SOAP_CAPITAL_BASE_URL("http://webservices.oorsprong.org/"),
     RESOURCE_CAPITAL("websamples.countryinfo/CountryInfoService.wso"),
-    BODY_PATH("src/test/resources/soap/filecapital.xml");
+    BODY_PATH("src/test/resources/soap/filecapital.xml"),
 
+    BODY_PATH_PAIS("src/test/resources/soap/filepais.xml");
     private String value;
 
     Path(String value) {
