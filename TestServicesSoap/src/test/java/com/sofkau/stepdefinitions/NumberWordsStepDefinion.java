@@ -20,17 +20,16 @@ import static net.serenitybdd.screenplay.GivenWhenThen.seeThat;
 import static net.serenitybdd.screenplay.rest.questions.ResponseConsequence.seeThatResponse;
 import static org.hamcrest.CoreMatchers.containsString;
 
-public class CurrencyStepDefinition extends ApiSetUp {
-
+public class NumberWordsStepDefinion extends ApiSetUp {
     String body;
-    private static final Logger LOGGER = Logger.getLogger(CurrencyStepDefinition.class);
+    private static final Logger LOGGER = Logger.getLogger(NumberWordsStepDefinion.class);
 
-    @Given("a user have the code of the country {string}")
-    public void aUserHaveTheCodeOfTheCountry(String code) {
+    @Given("a user have a {int} for the process")
+    public void aUserHaveAForTheProcess(Integer number) {
         try {
-            setUp(SOAP_CURRECNCY_BASE_URL.getValue());
+            setUp(SOAP_NUMBERS_BASE_URL.getValue());
             LOGGER.info("INICIA LA AUTOMATIZACION");
-            loadBody(code);
+            loadBody(String.valueOf(number));
         } catch (Exception e) {
             LOGGER.info(" fallo la configuracion inicial");
             LOGGER.warn(e.getMessage());
@@ -38,12 +37,12 @@ public class CurrencyStepDefinition extends ApiSetUp {
         }
     }
 
-    @When("the user sends the code to the api")
-    public void theUserSendsTheCodeToTheApi() {
+    @When("the user sends the number to the api")
+    public void theUserSendsTheNumberToTheApi() {
         try {
             actor.attemptsTo(
                     doPostSoap()
-                            .andTheResource(SOAP_CURRENCY_RESOURCE.getValue())
+                            .andTheResource(SOAP_RESOURCE_NUMBERS.getValue())
                             .withTheHeaders(headers().getHeadersCollection())
                             .andTheBody(body)
             );
@@ -54,14 +53,14 @@ public class CurrencyStepDefinition extends ApiSetUp {
             Assertions.fail();
         }
     }
-    @Then("the user gets the currency of the country {string}")
-    public void theUserGetsTheCurrencyOfTheCountry(String result) {
+    @Then("the user gets the text of the number {string}")
+    public void theUserGetsTheTextOfTheNumber(String result) {
         try {
             LOGGER.info(new String(LastResponse.received().answeredBy(actor).asByteArray(), StandardCharsets.UTF_8));
             actor.should(
                     seeThatResponse("el codigo de respuesta es: " + HttpStatus.SC_OK,
                             response -> response.statusCode(HttpStatus.SC_OK)),
-                    seeThat("La divisa es:",
+                    seeThat("El texto del numero es",
                             responseSoap(), containsString(result))
             );
             LOGGER.info("CUMPLE");
@@ -73,7 +72,7 @@ public class CurrencyStepDefinition extends ApiSetUp {
     }
 
     private void loadBody(String value) {
-        body = readFile(BODY_PATH_CURRENCY.getValue());
+        body = readFile(BODY_PATH_NUMBERS.getValue());
         body = String.format(body, value);
     }
 }

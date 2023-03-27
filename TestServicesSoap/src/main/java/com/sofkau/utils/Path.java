@@ -9,7 +9,10 @@ public enum Path {
     BODY_CAMEL_CASE_PATH("src/test/resources/soap/filecamelcase.xml"),
     SOAP_CURRECNCY_BASE_URL("http://webservices.oorsprong.org/"),
     SOAP_CURRENCY_RESOURCE("websamples.countryinfo/CountryInfoService.wso"),
-    BODY_PATH_CURRENCY("src/test/resources/soap/filecurrencycountry.xml")
+    BODY_PATH_CURRENCY("src/test/resources/soap/filecurrencycountry.xml"),
+    SOAP_NUMBERS_BASE_URL("https://www.dataaccess.com/"),
+    SOAP_RESOURCE_NUMBERS("webservicesserver/numberconversion.wso"),
+    BODY_PATH_NUMBERS("src/test/resources/soap/filenumbertowords.xml")
     ;
 
     private String value;
