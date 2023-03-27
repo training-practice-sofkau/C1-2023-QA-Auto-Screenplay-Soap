@@ -26,7 +26,7 @@ public class ContriesListStepDefinition extends ApiSetUp {
     @Given("a user that wants see contries")
     public void a_user_that_wants_see_contries() {
         try {
-            setUp(BODY_CONTRIES.getValue());
+            setUp(SOAP_CONTRIES.getValue());
             LOGGER.info("INICIA LA AUTOMATIZACION");
             loadBody();
         } catch (Exception e) {
@@ -42,7 +42,7 @@ public class ContriesListStepDefinition extends ApiSetUp {
         try {
             actor.attemptsTo(
                     doPostSoap()
-                            .andTheResource(BODY_CONTRIES.getValue())
+                            .andTheResource(RESOURCES_CONTRIES.getValue())
                             .withTheHeaders(headers().getHeadersCollection())
                             .andTheBody(body)
             );
@@ -75,7 +75,7 @@ public class ContriesListStepDefinition extends ApiSetUp {
     }
 
     private void loadBody() {
-        body = readFile(BODY_PATH_capital.getValue());
-        body = String.format(body, "CO");
+        body = readFile(BODY_CONTRIES_PATH.getValue());
+        body = String.format(body);
     }
 }

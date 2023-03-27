@@ -1,8 +1,8 @@
 Feature: Make sum
   AS
-  user
+   user
   I WANT TO
-  make sum
+   make sum
   SO THAT
   see result
 

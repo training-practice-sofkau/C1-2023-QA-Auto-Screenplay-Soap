@@ -7,8 +7,10 @@ public enum Path {
     SOAP_SUM_BASE_URL("http://www.dneonline.com/"),
     RESOURCE_SUM("calculator.asmx?wsdl"),
     BODY_PATH_SUM("src/test/resources/soap/filesum.xml"),
-    BODY_CONTRIES("http://eaf.ema.europa.eu/"),
-    BODY_PATH_CONTRIES("eaf/services/EutctService?wsdl");
+    SOAP_CONTRIES("http://eaf.ema.europa.eu/"),
+    RESOURCES_CONTRIES("eaf/services/EutctService?wsdl"),
+    BODY_CONTRIES_PATH("src/test/resources/soap/contrieslist.xml"),
+    BODY_OBJECT_PATH("src/test/resources/soap/objectlist.xml");
 
     private String value;
 
