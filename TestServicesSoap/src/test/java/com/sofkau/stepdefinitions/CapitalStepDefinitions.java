@@ -38,7 +38,6 @@ public class CapitalStepDefinitions extends ApiSetUp {
 
     }
 
-
     @When("the user sends the request to the api")
     public void theUserSendsTheRequestToTheApi() {
         try {
@@ -56,7 +55,6 @@ public class CapitalStepDefinitions extends ApiSetUp {
         }
 
     }
-
     @Then("the user gets the capital")
     public void theUserGetsTheCapital() {
         try {

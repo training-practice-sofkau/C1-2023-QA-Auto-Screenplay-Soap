@@ -1,25 +1,24 @@
 package com.sofkau.stepdefinitions;
 
 import com.sofkau.setup.ApiSetUp;
-import com.sofkau.utils.Path;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.When;
 import net.serenitybdd.screenplay.rest.questions.LastResponse;
 import org.apache.http.HttpStatus;
 import org.apache.log4j.Logger;
+import org.hamcrest.CoreMatchers;
 import org.junit.jupiter.api.Assertions;
 
 import java.nio.charset.StandardCharsets;
 
-import static com.sofkau.models.Headers.headers;
+import static com.sofkau.models.HeaderDivisas.headerDivisas;
 import static com.sofkau.questions.ResponseSoap.responseSoap;
 import static com.sofkau.tasks.DoPostSoap.doPostSoap;
 import static com.sofkau.utils.ManageFile.readFile;
 import static com.sofkau.utils.Path.*;
 import static net.serenitybdd.screenplay.GivenWhenThen.seeThat;
 import static net.serenitybdd.screenplay.rest.questions.ResponseConsequence.seeThatResponse;
-import static org.hamcrest.Matchers.containsString;
 
 
 public class CambioDivisaStepDefinitions extends ApiSetUp {
@@ -27,8 +26,8 @@ public class CambioDivisaStepDefinitions extends ApiSetUp {
     String body;
     private static final Logger LOGGER = Logger.getLogger(CambioDivisaStepDefinitions.class);
 
-    @Given("a user that wants to convert currencies")
-    public void aUserThatWantsToConvertCurrencies() {
+    @Given("que tengo acceso al servicio web de CurrencySystem para la conversion de divisas")
+    public void queTengoAccesoAlServicioWebDeCurrencySystemParaLaConversionDeDivisas() {
         try {
             setUp(SOAP_DIVISA_BASE_URL.getValue());
             LOGGER.info("INICIA LA AUTOMATIZACION");
@@ -40,13 +39,14 @@ public class CambioDivisaStepDefinitions extends ApiSetUp {
         }
     }
 
-    @When("the user sends the request to the API")
-    public void theUserSendsTheRequestToTheAPI() {
+    @When("envio {int} {string} a {string} al servicio")
+    public void envioAAlServicio(Integer cantidad, String divisaOrigen, String divisaDestino) {
         try {
+            body = String.format(body, divisaOrigen, divisaDestino, cantidad);
             actor.attemptsTo(
                     doPostSoap()
                             .andTheResource(RESOURCE_DIVISA.getValue())
-                            .withTheHeaders(headers().getHeadersCollection())
+                            .withTheHeaders(headerDivisas().getHeadersCollection())
                             .andTheBody(body)
             );
             LOGGER.info("Realiza la peticion");
@@ -57,15 +57,14 @@ public class CambioDivisaStepDefinitions extends ApiSetUp {
         }
     }
 
-    @Then("the user gets the equivalent currency")
-    public void theUserGetsTheEquivalentCurrency() {
+    @Then("deberia recibir el resultado de la conversion {string}")
+    public void deberiaRecibirElResultadoDeLaConversion(String resultadoEsperado) {
         try {
-            LOGGER.info(new String(LastResponse.received().answeredBy(actor).asByteArray(), StandardCharsets.UTF_8));
             actor.should(
-                    seeThatResponse("el codigo de respuesta es: " + HttpStatus.SC_OK,
+                    seeThatResponse("El codigo de respuesta es: " + HttpStatus.SC_OK,
                             response -> response.statusCode(HttpStatus.SC_OK)),
-                    seeThat("la tasa de cambio es",
-                            responseSoap(), containsString("USD"))
+                    seeThat("El resultado de la conversion es correcto",
+                            responseSoap(), CoreMatchers.containsString(resultadoEsperado))
             );
             LOGGER.info("CUMPLE");
         } catch (Exception e) {
@@ -74,9 +73,7 @@ public class CambioDivisaStepDefinitions extends ApiSetUp {
             Assertions.fail();
         }
     }
-
     private void loadBody() {
-        body = readFile(BODY_PATH.getValue());
-        body = String.format(body, "USD", "COP");
+        body = readFile(BODY_PATH1.getValue());
     }
 }

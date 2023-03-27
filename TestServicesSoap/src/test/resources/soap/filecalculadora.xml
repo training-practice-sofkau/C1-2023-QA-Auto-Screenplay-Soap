@@ -2,8 +2,8 @@
     <soapenv:Header/>
     <soapenv:Body>
         <tem:Add>
-            <tem:intA>5</tem:intA>
-            <tem:intB>8</tem:intB>
+            <tem:intA>%s</tem:intA>
+            <tem:intB>%s</tem:intB>
         </tem:Add>
     </soapenv:Body>
 </soapenv:Envelope>
