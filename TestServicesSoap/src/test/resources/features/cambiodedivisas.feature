@@ -1,4 +1,4 @@
-Feature: Get the actual capital
+Feature: Get the actual exchange
   AS user
   I WANT TO exchange my money
   SO THAT I can travel to any country

@@ -6,7 +6,10 @@ public enum Path {
     BODY_PATH("src/test/resources/soap/filecapital.xml"),
     SOAP_DIVISAS_BASE_URL("http://fx.currencysystem.com/"),
     RESOURCE_CURRENCY("webservices/CurrencyServer4.asmx"),
-    CURRENCY_BODY_PATH("src/test/resources/soap/filecurrency.xml");
+    CURRENCY_BODY_PATH("src/test/resources/soap/filecurrency.xml"),
+    SOAP_CALCULATOR_URL("http://www.dneonline.com/"),
+    RESOURCE_SUM("calculator.asmx"),
+    CALCULATOR_BODY_PATH("src/test/resources/soap/filecalculadora.xml");
 
     private String value;
 
