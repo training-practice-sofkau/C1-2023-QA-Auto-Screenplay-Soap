@@ -87,6 +87,16 @@ public class FindPersonStepDefinition extends ApiSetUp {
             LOGGER.info("Age: " + age);
 
             LOGGER.info("CUMPLE");
+
+        } catch (AssertionError er) {
+            actor.should(
+                    seeThatResponse("el codigo de respuesta es: " + HttpStatus.SC_BAD_REQUEST,
+                            response -> response.statusCode(code))
+            );
+            LOGGER.info("El código de estado no es 200, sino 400");
+            LOGGER.warn(er.getMessage());
+            Assertions.fail();
+
         } catch (Exception e) {
             LOGGER.info("Error al realizar la comparacion");
             LOGGER.warn(e.getMessage());

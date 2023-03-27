@@ -12,5 +12,10 @@ Feature: Find Person by ID
     When the user sends a request to get the person's information with the provided <id>
     Then the user should receive the person's information and the status <code>
     Examples:
-      | id  | code |
-      | "1" | 200  |
+      | id     | code |
+      | "1"    | 200  |
+      | "2"    | 200  |
+      | ""     | 200  |
+      | "1000" | 200  |
+      | "A"    | 200  |
+      | "<"    | 400  |
