@@ -1,13 +1,15 @@
 package com.sofkau.stepdefinitions;
+
 import com.sofkau.setup.ApiSetUp;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import net.serenitybdd.screenplay.rest.questions.LastResponse;
-import org.apache.http.HttpStatus;
 import org.apache.log4j.Logger;
 import org.junit.jupiter.api.Assertions;
+
 import java.nio.charset.StandardCharsets;
+
 import static com.sofkau.models.Headers.headers;
 import static com.sofkau.questions.ResponseSoap.responseSoap;
 import static com.sofkau.tasks.DoPostSoap.doPostSoap;
@@ -17,16 +19,18 @@ import static net.serenitybdd.screenplay.GivenWhenThen.seeThat;
 import static net.serenitybdd.screenplay.rest.questions.ResponseConsequence.seeThatResponse;
 import static org.hamcrest.CoreMatchers.containsString;
 
+public class BanderaPorCodigoISOStepDefinition  extends ApiSetUp {
+    private static final Logger LOGGER = Logger.getLogger(CodigoISOIdiomaStepDefinition.class);
 
-public class CodigoISOIdiomaStepDefinition  extends ApiSetUp {
     String body;
     private void loadBody(String pais) {
-        body = readFile(BODY_PATH_ISO_CODE.getValue());
+        body = readFile(BODY_PATH_ISO_BANDERA.getValue());
         body = String.format(body, pais );
     }
-    private static final Logger LOGGER = Logger.getLogger(CodigoISOIdiomaStepDefinition.class);
-    @Given("El servicio de Conuntri Info Service SOAP esta disponible")
-    public void elServicioDeConuntriInfoServiceSOAPEstaDisponible() {
+
+    @Given("El servicio de Country Info Service SOAP esta disponible")
+    public void elServicioDeCountryInfoServiceSOAPEstaDisponible() {
+
 
         try {
             setUp(SOAP_CAPITAL_BASE_URL.getValue());
@@ -36,16 +40,18 @@ public class CodigoISOIdiomaStepDefinition  extends ApiSetUp {
             LOGGER.warn(e.getMessage());
             Assertions.fail();
         }
+
     }
 
+    @When("Envio el codigo ISO del pais {string}")
+    public void envioElCodigoISODelPais(String pais) {
 
-    @When("Consulto el codigo ISO del {string}")
-    public void consultoElCodigoISODel(String pais) {
+
         try {
             loadBody(pais);
             actor.attemptsTo(
                     doPostSoap()
-                            .andTheResource(RESOURCE_ISO_LENGUAJE_CODE.getValue())
+                            .andTheResource(RESOURCE_BANDERA_ISO_CODE.getValue())
                             .withTheHeaders(headers().getHeadersCollection())
                             .andTheBody(body)
             );
@@ -55,10 +61,12 @@ public class CodigoISOIdiomaStepDefinition  extends ApiSetUp {
             LOGGER.warn(e.getMessage());
             Assertions.fail();
         }
+
     }
 
-    @Then("deberia obtener el {string}  y el {int} de la respuesta")
-    public void deberiaObtenerElYElDeLaRespuesta(String codigoISO, Integer Statushttp) {
+    @Then("deberia obtener la {string}  y el {int} de la respuesta")
+    public void deberiaObtenerLaYElDeLaRespuesta(String rutaBandera, Integer Statushttp) {
+
 
         try {
             LOGGER.info(new String(LastResponse.received().answeredBy(actor).asByteArray(), StandardCharsets.UTF_8));
@@ -66,8 +74,8 @@ public class CodigoISOIdiomaStepDefinition  extends ApiSetUp {
 
                     seeThatResponse("el codigo de respuesta es: " + Statushttp,
                             response -> response.statusCode(Statushttp)),
-                    seeThat(" El codigo ISO del idioma es:",
-                            responseSoap(), containsString(codigoISO))
+                    seeThat("la ruta para la imagen de la bandera es:",
+                            responseSoap(), containsString(rutaBandera))
             );
             LOGGER.info("CUMPLE");
         } catch (Exception e) {
@@ -75,5 +83,7 @@ public class CodigoISOIdiomaStepDefinition  extends ApiSetUp {
             LOGGER.warn(e.getMessage());
             Assertions.fail();
         }
+
     }
 }
+

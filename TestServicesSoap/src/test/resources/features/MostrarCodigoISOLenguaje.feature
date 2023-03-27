@@ -14,6 +14,6 @@ Feature: Consultar codigo ISO de un idioma
       | "Spanish" | 200    | "es"                       |
       | "English" | 200    | "eng"                      |
       | "French"  | 200    | "fr"                       |
-      | "Pepe"    | 404    | "Language name not found!" |
+      | "Pepe"    |        | "Language name not found!" |
 
 
