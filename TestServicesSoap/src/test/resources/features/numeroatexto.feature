@@ -7,6 +7,6 @@ Feature: Conversión de números a texto con Data Access
 
     Examples:
       | numero | resultado                                                          |
-      | 123    | hundred and twenty three                                           |
+      | 123    | one hundred and twenty three                                       |
       | 4567   | four thousand five hundred and sixty seven                         |
       | 999999 | nine hundred and ninety nine thousand nine hundred and ninety nine |

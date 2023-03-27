@@ -16,6 +16,11 @@ import static com.sofkau.utils.Path.*;
 import static net.serenitybdd.screenplay.GivenWhenThen.seeThat;
 import static net.serenitybdd.screenplay.rest.questions.ResponseConsequence.seeThatResponse;
 import static org.hamcrest.CoreMatchers.containsString;
+import javax.xml.parsers.DocumentBuilderFactory;
+import org.w3c.dom.Document;
+import org.xml.sax.InputSource;
+
+import java.io.StringReader;
 
 public class NumtexStepDefinitions extends ApiSetUp {
     String body;
@@ -52,6 +57,9 @@ public class NumtexStepDefinitions extends ApiSetUp {
     @Then("deberia recibir el resultado en texto {string}")
     public void deberiaRecibirElResultadoEnTexto(String resultado) {
         try {
+            String responseString = LastResponse.received().answeredBy(actor).asString();
+            Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(new InputSource(new StringReader(responseString)));
+            String convertedValue = doc.getElementsByTagName("m:NumberToWordsResult").item(0).getTextContent().trim();
             actor.should(
                     seeThatResponse("el codigo de respuesta es: " + HttpStatus.SC_OK,
                             response -> response.statusCode(HttpStatus.SC_OK)),
@@ -59,7 +67,7 @@ public class NumtexStepDefinitions extends ApiSetUp {
                             responseSoap(), containsString(resultado))
             );
             LOGGER.info("El valor esperado es: " + resultado);
-            LOGGER.info("El valor actual es: " + LastResponse.received().answeredBy(actor).asString());
+            LOGGER.info("El valor actual es: " + convertedValue);
             LOGGER.info("CUMPLE");
 
         } catch (Exception e) {
@@ -68,6 +76,7 @@ public class NumtexStepDefinitions extends ApiSetUp {
             Assertions.fail();
         }
     }
+
     private void loadBody() {
         body = readFile(BODY_PATH3.getValue());
     }

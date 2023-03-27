@@ -7,8 +7,13 @@ import io.cucumber.java.en.When;
 import net.serenitybdd.screenplay.rest.questions.LastResponse;
 import org.apache.http.HttpStatus;
 import org.apache.log4j.Logger;
-import org.hamcrest.CoreMatchers;
 import org.junit.jupiter.api.Assertions;
+import org.w3c.dom.Document;
+import org.xml.sax.InputSource;
+
+import javax.xml.parsers.DocumentBuilderFactory;
+import java.io.StringReader;
+
 import static com.sofkau.models.HeaderDivisas.headerDivisas;
 import static com.sofkau.questions.ResponseSoap.responseSoap;
 import static com.sofkau.tasks.DoPostSoap.doPostSoap;
@@ -16,6 +21,7 @@ import static com.sofkau.utils.ManageFile.readFile;
 import static com.sofkau.utils.Path.*;
 import static net.serenitybdd.screenplay.GivenWhenThen.seeThat;
 import static net.serenitybdd.screenplay.rest.questions.ResponseConsequence.seeThatResponse;
+import static org.hamcrest.Matchers.containsString;
 
 
 public class CambioDivisaStepDefinitions extends ApiSetUp {
@@ -57,14 +63,17 @@ public class CambioDivisaStepDefinitions extends ApiSetUp {
     @Then("deberia recibir el resultado de la conversion {string}")
     public void deberiaRecibirElResultadoDeLaConversion(String resultadoEsperado) {
         try {
+            String responseString = LastResponse.received().answeredBy(actor).asString();
+            Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(new InputSource(new StringReader(responseString)));
+            String convertedValue = doc.getElementsByTagName("ConvertToNumResult").item(0).getTextContent().trim();
             actor.should(
                     seeThatResponse("El codigo de respuesta es: " + HttpStatus.SC_OK,
                             response -> response.statusCode(HttpStatus.SC_OK)),
                     seeThat("El resultado de la conversion es correcto",
-                            responseSoap(), CoreMatchers.containsString(resultadoEsperado))
+                            responseSoap(), containsString(resultadoEsperado))
             );
             LOGGER.info("El valor esperado es: " + resultadoEsperado);
-            LOGGER.info("El valor actual es: " + LastResponse.received().answeredBy(actor).asString());
+            LOGGER.info("El valor actual es: " + convertedValue);
             LOGGER.info("CUMPLE");
         } catch (Exception e) {
             LOGGER.info("Error al realizar la comparacion");

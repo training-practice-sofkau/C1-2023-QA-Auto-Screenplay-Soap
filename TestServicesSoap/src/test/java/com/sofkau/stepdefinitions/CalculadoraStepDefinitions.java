@@ -9,6 +9,12 @@ import org.apache.http.HttpStatus;
 import org.apache.log4j.Logger;
 import org.hamcrest.CoreMatchers;
 import org.junit.jupiter.api.Assertions;
+import org.w3c.dom.Document;
+import org.xml.sax.InputSource;
+
+import javax.xml.parsers.DocumentBuilderFactory;
+import java.io.StringReader;
+
 import static com.sofkau.models.HeaderSuma.headerSuma;
 import static com.sofkau.questions.ResponseSoap.responseSoap;
 import static com.sofkau.tasks.DoPostSoap.doPostSoap;
@@ -56,6 +62,9 @@ public class CalculadoraStepDefinitions extends ApiSetUp {
     @Then("deberia recibir el resultado de la suma {int}")
     public void deberiaRecibirElResultadoDeLaSuma(Integer resultado) {
         try {
+            String responseString = LastResponse.received().answeredBy(actor).asString();
+            Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(new InputSource(new StringReader(responseString)));
+            String convertedValue = doc.getElementsByTagName("AddResult").item(0).getTextContent().trim();
             actor.should(
                     seeThatResponse("El código de respuesta es: " + HttpStatus.SC_OK,
                             response -> response.statusCode(HttpStatus.SC_OK)),
@@ -63,10 +72,10 @@ public class CalculadoraStepDefinitions extends ApiSetUp {
                             responseSoap(), CoreMatchers.containsString(String.valueOf(resultado)))
             );
             LOGGER.info("El valor esperado es: " + resultado);
-            LOGGER.info("El valor actual es: " + LastResponse.received().answeredBy(actor).asString());
+            LOGGER.info("El valor actual es: " + convertedValue);
             LOGGER.info("CUMPLE");
         } catch (Exception e) {
-            LOGGER.info("Error al realizar la comparación");
+            LOGGER.info("Error al realizar la comparacion");
             LOGGER.warn(e.getMessage());
             Assertions.fail();
         }
