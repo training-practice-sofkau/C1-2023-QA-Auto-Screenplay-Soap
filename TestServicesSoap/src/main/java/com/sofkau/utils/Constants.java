@@ -6,7 +6,7 @@ public enum Constants {
     TYPE("application/soap+xml"),
     CODE("charset=UTF-8"),
     ACTION_OFFICIAL_RATE("action=\"http://www.xignite.com/services/GetOfficialRate\""),
-    ACTION_CONVER_VALUE("action=\"http://www.xignite.com/services/ConvertRealTimeValue\"");
+    ACTION_CONVERT_VALUE("action=\"http://www.xignite.com/services/ConvertRealTimeValue\"");
 
     private final String value;
 

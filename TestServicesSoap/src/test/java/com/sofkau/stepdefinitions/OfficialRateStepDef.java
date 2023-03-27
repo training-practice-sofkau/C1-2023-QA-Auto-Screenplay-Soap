@@ -64,7 +64,7 @@ public class OfficialRateStepDef extends ApiSetUp {
     public void iWillSeeAResponseCode(Integer code) {
         try {
             actor.should(
-                    seeThatResponse("Status code of book created should be shown",
+                    seeThatResponse("Status code",
                             response -> response.statusCode(code))
             );
             log.info("First assert passed");

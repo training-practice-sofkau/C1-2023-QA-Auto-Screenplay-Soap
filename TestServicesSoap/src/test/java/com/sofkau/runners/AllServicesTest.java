@@ -7,9 +7,9 @@ import org.junit.runner.RunWith;
 @RunWith(CucumberWithSerenity.class)
 @CucumberOptions(
         snippets = CucumberOptions.SnippetType.CAMELCASE,
-        features = {"src/test/resources/features"},
+        features = {"src/test/resources/features/"},
         glue = {"com.sofkau.stepdefinitions"},
-        tags = "@ConvertValue"
+        tags = ""
 )
-public class ConvertValueTest {
+public class AllServicesTest {
 }

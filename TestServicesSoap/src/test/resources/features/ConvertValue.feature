@@ -10,7 +10,7 @@ Feature: Convert different amounts and currencies
     Then I will see the response code <code>
     And I will see the result '<result>'
     Examples:
-      | from     | to  | amount    | code | result  |
-      | USD | COP | 10.5 | 200  | 49775.22 |
-      | Canada   | EUR | 3/20/2023 | 200  | 1.4658  |
-      | Europe   | USD | 2/25/2022 | 200  | 1.1216  |
+      | from | to  | amount | code | result |
+      | COP  | USD | 50000  | 200  | 10.5   |
+      | EUR  | USD | 20.5   | 200  | 22.1   |
+      | CLP  | CAD | 30000  | 200  | 50.8   |
