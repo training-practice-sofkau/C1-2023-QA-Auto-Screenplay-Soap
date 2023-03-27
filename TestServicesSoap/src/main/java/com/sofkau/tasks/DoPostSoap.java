@@ -12,18 +12,18 @@ public class DoPostSoap implements Task {
     private String body;
     private String resource;
 
-    public DoPostSoap withTheHeaders(Map<String, Object> headers){
-        this.headers=headers;
+    public DoPostSoap withTheHeaders(Map<String, Object> headers) {
+        this.headers = headers;
         return this;
     }
 
-    public DoPostSoap andTheResource(String resource){
-        this.resource=resource;
+    public DoPostSoap andTheResource(String resource) {
+        this.resource = resource;
         return this;
     }
 
-    public DoPostSoap andTheBody(String body){
-        this.body=body;
+    public DoPostSoap andTheBody(String body) {
+        this.body = body;
         return this;
     }
 
@@ -38,7 +38,7 @@ public class DoPostSoap implements Task {
         );
     }
 
-    public static  DoPostSoap doPostSoap(){
+    public static DoPostSoap doPostSoap() {
         return new DoPostSoap();
     }
 }

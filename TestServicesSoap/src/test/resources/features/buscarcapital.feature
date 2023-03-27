@@ -1,10 +1,10 @@
 Feature: Get the actual capital
   AS
-    user
+  user
   I WANT TO
-   get
+  get
   SO THAT
-   see capital
+  see capital
 
   @capital
   Scenario: List capital

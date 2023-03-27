@@ -1,0 +1,16 @@
+<soap:Envelope xmlns:soap="http://www.w3.org/2003/05/soap-envelope" xmlns:ser="http://www.xignite.com/services/">
+    <soap:Header>
+        <ser:Header>
+            <ser:Username>%s</ser:Username>
+            <ser:Password>?</ser:Password>
+            <ser:Tracer>?</ser:Tracer>
+        </ser:Header>
+    </soap:Header>
+    <soap:Body>
+        <ser:ConvertRealTimeValue>
+            <ser:From>%s</ser:From>
+            <ser:To>%s</ser:To>
+            <ser:Amount>%s</ser:Amount>
+        </ser:ConvertRealTimeValue>
+    </soap:Body>
+</soap:Envelope>

@@ -5,7 +5,7 @@ public enum Path {
     RESOURCE_CAPITAL("websamples.countryinfo/CountryInfoService.wso"),
     BODY_PATH("src/test/resources/soap/filecapital.xml");
 
-    private String value;
+    private final String value;
 
     Path(String value) {
         this.value = value;

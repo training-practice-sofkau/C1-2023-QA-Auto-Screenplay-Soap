@@ -1,11 +1,12 @@
 package com.sofkau.utils;
 
-public enum Log4jValues {
-    LOG4J_PROPERTY_PATH("src/test/resources/log4j.properties");
+public enum Constants {
+    ACTOR("Xignite user"),
+    TOKEN("6DB4187689F74AEC9ABDE3A933FC3DDF");
 
     private final String value;
 
-    Log4jValues(String value) {
+    Constants(String value) {
         this.value = value;
     }
 
