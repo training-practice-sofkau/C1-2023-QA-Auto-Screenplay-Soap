@@ -20,17 +20,17 @@ import static net.serenitybdd.screenplay.GivenWhenThen.seeThat;
 import static net.serenitybdd.screenplay.rest.questions.ResponseConsequence.seeThatResponse;
 import static org.hamcrest.CoreMatchers.containsString;
 
-public class CamelCaseStepDefinitions extends ApiSetUp {
+public class CurrencyStepDefinition extends ApiSetUp {
 
     String body;
-    private static final Logger LOGGER = Logger.getLogger(CamelCaseStepDefinitions.class);
+    private static final Logger LOGGER = Logger.getLogger(CurrencyStepDefinition.class);
 
-    @Given("a user have a {string} that need format")
-    public void aUserHaveAThatNeedFormat(String firstText) {
+    @Given("a user have the code of the country {string}")
+    public void aUserHaveTheCodeOfTheCountry(String code) {
         try {
-            setUp(SOAP_CAMEL_CASE_BASE_URL.getValue());
+            setUp(SOAP_CURRECNCY_BASE_URL.getValue());
             LOGGER.info("INICIA LA AUTOMATIZACION");
-            loadBody(firstText);
+            loadBody(code);
         } catch (Exception e) {
             LOGGER.info(" fallo la configuracion inicial");
             LOGGER.warn(e.getMessage());
@@ -38,12 +38,12 @@ public class CamelCaseStepDefinitions extends ApiSetUp {
         }
     }
 
-    @When("the user sends the text to the api")
-    public void theUserSendsTheTextToTheApi() {
+    @When("the user sends the code to the api")
+    public void theUserSendsTheCodeToTheApi() {
         try {
             actor.attemptsTo(
                     doPostSoap()
-                            .andTheResource(RESOURCE_CAMEL_CASE.getValue())
+                            .andTheResource(SOAP_CURRENCY_RESOURCE.getValue())
                             .withTheHeaders(headers().getHeadersCollection())
                             .andTheBody(body)
             );
@@ -54,15 +54,15 @@ public class CamelCaseStepDefinitions extends ApiSetUp {
             Assertions.fail();
         }
     }
-    @Then("the user gets the text with correct format {string}")
-    public void theUserGetsTheTextWithCorrectFormat(String expextedText) {
+    @Then("the user gets the currency of the country {string}")
+    public void theUserGetsTheCurrencyOfTheCountry(String result) {
         try {
             LOGGER.info(new String(LastResponse.received().answeredBy(actor).asByteArray(), StandardCharsets.UTF_8));
             actor.should(
                     seeThatResponse("el codigo de respuesta es: " + HttpStatus.SC_OK,
                             response -> response.statusCode(HttpStatus.SC_OK)),
                     seeThat("El texto es",
-                            responseSoap(), containsString(expextedText))
+                            responseSoap(), containsString(result))
             );
             LOGGER.info("CUMPLE");
         } catch (Exception e) {
@@ -73,8 +73,7 @@ public class CamelCaseStepDefinitions extends ApiSetUp {
     }
 
     private void loadBody(String value) {
-        body = readFile(BODY_CAMEL_CASE_PATH.getValue());
+        body = readFile(BODY_PATH_CURRENCY.getValue());
         body = String.format(body, value);
     }
-
 }
