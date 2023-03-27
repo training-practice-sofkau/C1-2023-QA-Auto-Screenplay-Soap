@@ -9,9 +9,6 @@ import org.apache.http.HttpStatus;
 import org.apache.log4j.Logger;
 import org.hamcrest.CoreMatchers;
 import org.junit.jupiter.api.Assertions;
-
-import java.nio.charset.StandardCharsets;
-
 import static com.sofkau.models.HeaderDivisas.headerDivisas;
 import static com.sofkau.questions.ResponseSoap.responseSoap;
 import static com.sofkau.tasks.DoPostSoap.doPostSoap;
@@ -66,6 +63,8 @@ public class CambioDivisaStepDefinitions extends ApiSetUp {
                     seeThat("El resultado de la conversion es correcto",
                             responseSoap(), CoreMatchers.containsString(resultadoEsperado))
             );
+            LOGGER.info("El valor esperado es: " + resultadoEsperado);
+            LOGGER.info("El valor actual es: " + LastResponse.received().answeredBy(actor).asString());
             LOGGER.info("CUMPLE");
         } catch (Exception e) {
             LOGGER.info("Error al realizar la comparacion");

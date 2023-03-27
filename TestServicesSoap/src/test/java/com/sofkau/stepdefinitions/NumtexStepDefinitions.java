@@ -8,9 +8,6 @@ import net.serenitybdd.screenplay.rest.questions.LastResponse;
 import org.apache.http.HttpStatus;
 import org.apache.log4j.Logger;
 import org.junit.jupiter.api.Assertions;
-
-import java.nio.charset.StandardCharsets;
-
 import static com.sofkau.models.Headers.headers;
 import static com.sofkau.questions.ResponseSoap.responseSoap;
 import static com.sofkau.tasks.DoPostSoap.doPostSoap;
@@ -36,7 +33,6 @@ public class NumtexStepDefinitions extends ApiSetUp {
             Assertions.fail();
         }
     }
-
     @When("envio el numero {int} al servicio")
     public void envioElNumeroAlServicio(int numero) {
         try {
@@ -53,7 +49,6 @@ public class NumtexStepDefinitions extends ApiSetUp {
             Assertions.fail();
         }
     }
-
     @Then("deberia recibir el resultado en texto {string}")
     public void deberiaRecibirElResultadoEnTexto(String resultado) {
         try {
@@ -63,14 +58,16 @@ public class NumtexStepDefinitions extends ApiSetUp {
                     seeThat(" el resultado de la conversion es",
                             responseSoap(), containsString(resultado))
             );
+            LOGGER.info("El valor esperado es: " + resultado);
+            LOGGER.info("El valor actual es: " + LastResponse.received().answeredBy(actor).asString());
             LOGGER.info("CUMPLE");
+
         } catch (Exception e) {
             LOGGER.info("Error al realizar la comparacion");
             LOGGER.warn(e.getMessage());
             Assertions.fail();
         }
     }
-
     private void loadBody() {
         body = readFile(BODY_PATH3.getValue());
     }

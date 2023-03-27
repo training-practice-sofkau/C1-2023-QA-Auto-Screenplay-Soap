@@ -9,7 +9,6 @@ import org.apache.http.HttpStatus;
 import org.apache.log4j.Logger;
 import org.hamcrest.CoreMatchers;
 import org.junit.jupiter.api.Assertions;
-import java.nio.charset.StandardCharsets;
 import static com.sofkau.models.HeaderSuma.headerSuma;
 import static com.sofkau.questions.ResponseSoap.responseSoap;
 import static com.sofkau.tasks.DoPostSoap.doPostSoap;
@@ -63,6 +62,8 @@ public class CalculadoraStepDefinitions extends ApiSetUp {
                     seeThat("El resultado de la suma es " + resultado,
                             responseSoap(), CoreMatchers.containsString(String.valueOf(resultado)))
             );
+            LOGGER.info("El valor esperado es: " + resultado);
+            LOGGER.info("El valor actual es: " + LastResponse.received().answeredBy(actor).asString());
             LOGGER.info("CUMPLE");
         } catch (Exception e) {
             LOGGER.info("Error al realizar la comparación");
