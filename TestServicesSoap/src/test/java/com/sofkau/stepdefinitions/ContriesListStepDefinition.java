@@ -20,14 +20,13 @@ import static net.serenitybdd.screenplay.GivenWhenThen.seeThat;
 import static net.serenitybdd.screenplay.rest.questions.ResponseConsequence.seeThatResponse;
 import static org.hamcrest.CoreMatchers.containsString;
 
-public class CapitalStepDefinitions extends ApiSetUp {
+public class ContriesListStepDefinition extends ApiSetUp {
     String body;
     private static final Logger LOGGER = Logger.getLogger(CapitalStepDefinitions.class);
-
-    @Given("a user that wants to know the actual capital")
-    public void aUserThatWantsToKnowTheActualCapital() {
+    @Given("a user that wants see contries")
+    public void a_user_that_wants_see_contries() {
         try {
-            setUp(SOAP_CAPITAL_BASE_URL.getValue());
+            setUp(BODY_CONTRIES.getValue());
             LOGGER.info("INICIA LA AUTOMATIZACION");
             loadBody();
         } catch (Exception e) {
@@ -35,16 +34,15 @@ public class CapitalStepDefinitions extends ApiSetUp {
             LOGGER.warn(e.getMessage());
             Assertions.fail();
         }
-
     }
 
 
-    @When("the user sends the request to the api")
-    public void theUserSendsTheRequestToTheApi() {
+    @When("the user send request")
+    public void the_user_send_request() {
         try {
             actor.attemptsTo(
                     doPostSoap()
-                            .andTheResource(RESOURCE_CAPITAL.getValue())
+                            .andTheResource(BODY_CONTRIES.getValue())
                             .withTheHeaders(headers().getHeadersCollection())
                             .andTheBody(body)
             );
@@ -54,19 +52,19 @@ public class CapitalStepDefinitions extends ApiSetUp {
             LOGGER.warn(e.getMessage());
             Assertions.fail();
         }
+}
 
-    }
 
-    @Then("the user gets the capital")
-    public void theUserGetsTheCapital() {
+    @Then("the user gets a contries list")
+    public void the_user_gets_a_contries_list() {
         try {
             LOGGER.info(new String(LastResponse.received().answeredBy(actor).asByteArray(), StandardCharsets.UTF_8));
             actor.should(
                     seeThatResponse("el codigo de respuesta es: " + HttpStatus.SC_OK,
                             response -> response.statusCode(HttpStatus.SC_OK)),
-                    seeThat(" la capital es",
+                    seeThat("El pais es:",
                             responseSoap(),
-                            containsString("Bogota"))
+                            containsString("Afghanistan"))
             );
             LOGGER.info("CUMPLE");
         } catch (Exception e) {
@@ -74,7 +72,6 @@ public class CapitalStepDefinitions extends ApiSetUp {
             LOGGER.warn(e.getMessage());
             Assertions.fail();
         }
-
     }
 
     private void loadBody() {
