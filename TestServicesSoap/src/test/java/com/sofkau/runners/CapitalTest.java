@@ -9,7 +9,7 @@ import org.junit.runner.RunWith;
         snippets = CucumberOptions.SnippetType.CAMELCASE,
         features = {"src/test/resources/features/buscarcapital.feature"},
         glue = {"com.sofkau.stepdefinitions"},
-        tags = ""
+        tags = "@capital"
 )
 public class CapitalTest {
 }

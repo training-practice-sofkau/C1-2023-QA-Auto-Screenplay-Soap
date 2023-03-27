@@ -8,7 +8,7 @@ import org.junit.runner.RunWith;
 @CucumberOptions(
         snippets = CucumberOptions.SnippetType.CAMELCASE,
         features = {"src/test/resources/features"},
-        glue = {"com.sofkau.stepdefinitons"},
+        glue = {"com.sofkau.stepdefinitions"},
         tags = "@OfficialRate"
 )
 public class OfficialRateTest {

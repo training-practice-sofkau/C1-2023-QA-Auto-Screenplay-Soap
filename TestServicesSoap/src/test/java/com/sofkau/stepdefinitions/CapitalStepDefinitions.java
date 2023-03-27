@@ -6,6 +6,8 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.apache.http.HttpStatus;
 import org.junit.jupiter.api.Assertions;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import static com.sofkau.models.Headers.headers;
 import static com.sofkau.questions.ResponseSoap.responseSoap;
@@ -17,6 +19,7 @@ import static net.serenitybdd.screenplay.rest.questions.ResponseConsequence.seeT
 import static org.hamcrest.CoreMatchers.containsString;
 
 public class CapitalStepDefinitions extends ApiSetUp {
+    private final Logger log = LoggerFactory.getLogger(CapitalStepDefinitions.class);
     String body;
 
     @Given("a user that wants to know the actual capital")
@@ -25,6 +28,8 @@ public class CapitalStepDefinitions extends ApiSetUp {
             setUp(SOAP_CAPITAL_BASE_URL.getValue());
             loadBody();
         } catch (Exception e) {
+            log.error("Wrong Setup provided");
+            log.error(e.getMessage());
             Assertions.fail();
         }
 
@@ -35,11 +40,13 @@ public class CapitalStepDefinitions extends ApiSetUp {
         try {
             actor.attemptsTo(
                     doPostSoap()
-                            .andTheResource(RESOURCE_CAPITAL.getValue())
-                            .withTheHeaders(headers().getHeadersCollection())
-                            .andTheBody(body)
+                            .andResource(RESOURCE_CAPITAL.getValue())
+                            .withHeaders(headers().getHeadersCol())
+                            .andBody(body)
             );
         } catch (Exception e) {
+            log.error("Wrong step provided");
+            log.error(e.getMessage());
             Assertions.fail();
         }
 
@@ -55,7 +62,11 @@ public class CapitalStepDefinitions extends ApiSetUp {
                             responseSoap(), containsString("Bogota"))
             );
         } catch (Exception e) {
+            log.error("Test failed");
+            log.error(e.getMessage());
             Assertions.fail();
+        } finally {
+            log.info("Test completed");
         }
 
     }

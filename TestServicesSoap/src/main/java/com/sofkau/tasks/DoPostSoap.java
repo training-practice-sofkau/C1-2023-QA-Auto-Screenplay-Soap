@@ -12,17 +12,17 @@ public class DoPostSoap implements Task {
     private String body;
     private String resource;
 
-    public DoPostSoap withTheHeaders(Map<String, Object> headers) {
+    public DoPostSoap withHeaders(Map<String, Object> headers) {
         this.headers = headers;
         return this;
     }
 
-    public DoPostSoap andTheResource(String resource) {
+    public DoPostSoap andResource(String resource) {
         this.resource = resource;
         return this;
     }
 
-    public DoPostSoap andTheBody(String body) {
+    public DoPostSoap andBody(String body) {
         this.body = body;
         return this;
     }
