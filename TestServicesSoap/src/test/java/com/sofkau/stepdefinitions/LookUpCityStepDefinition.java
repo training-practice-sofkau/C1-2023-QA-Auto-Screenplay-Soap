@@ -67,24 +67,26 @@ public class LookUpCityStepDefinition extends ApiSetUp {
         try {
             LOGGER.info(responseBody);
             actor.should(
-                    seeThatResponse("el codigo de respuesta es: " + HttpStatus.SC_OK,
+                    seeThatResponse("el codigo de respuesta es: " + code,
                             response -> response.statusCode(code))
             );
             /**
              * Método parse() de la instancia de DocumentBuilder analiza el cuerpo de respuesta del mensaje SOAP,
              * que se proporciona como un ByteArrayInputStream
              */
-            Document document = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(new ByteArrayInputStream(responseBody.getBytes()));
+            if(code == 200) {
+                Document document = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(new ByteArrayInputStream(responseBody.getBytes()));
 
-            //la consulta XPath es "//", que significa "seleccionar todos los elementos con el nombre especificado en el documento"
-            String city = XPathFactory.newInstance().newXPath().compile("//City").evaluate(document);
-            String state = XPathFactory.newInstance().newXPath().compile("//State").evaluate(document);
+                //la consulta XPath es "//", que significa "seleccionar todos los elementos con el nombre especificado en el documento"
+                String city = XPathFactory.newInstance().newXPath().compile("//City").evaluate(document);
+                String state = XPathFactory.newInstance().newXPath().compile("//State").evaluate(document);
 
-            // Mostrar contenido deseado en la consola
-            LOGGER.info("City: " + city);
-            LOGGER.info("State: " + state);
+                // Mostrar contenido deseado en la consola
+                LOGGER.info("City: " + city);
+                LOGGER.info("State: " + state);
 
-            LOGGER.info("CUMPLE");
+                LOGGER.info("CUMPLE");
+            }
 
         } catch (AssertionError er) {
             actor.should(
