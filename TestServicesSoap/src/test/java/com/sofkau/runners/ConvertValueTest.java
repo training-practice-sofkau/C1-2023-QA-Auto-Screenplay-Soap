@@ -7,9 +7,9 @@ import org.junit.runner.RunWith;
 @RunWith(CucumberWithSerenity.class)
 @CucumberOptions(
         snippets = CucumberOptions.SnippetType.CAMELCASE,
-        features = {"src/test/resources/features/buscarcapital.feature"},
-        glue = {"com.sofkau.stepdefinitions"},
-        tags = "@capital"
+        features = {"src/test/resources/features"},
+        glue = {"com.sofkau.stepdefinitons"},
+        tags = "@ConvertValue"
 )
-public class CapitalTest {
+public class ConvertValueTest {
 }
