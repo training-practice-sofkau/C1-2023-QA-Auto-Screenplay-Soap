@@ -12,6 +12,12 @@ public class Headers {
         return headersCollection;
     }
 
+    public Map<String, Object> getHeadersCollectionAdd(){
+        this.headersCollection.put("Content-Type", "text/xml;charset=UTF-8");
+        this.headersCollection.put("SOAPAction", "http://tempuri.org/Add");
+        return headersCollection;
+    }
+
     public static Headers headers(){
         return new Headers();
     }
