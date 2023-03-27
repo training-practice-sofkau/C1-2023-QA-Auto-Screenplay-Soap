@@ -118,7 +118,7 @@ public class MultiplicarStepDefinitions extends ApiSetUp {
                     doPostSoap()
                             .andTheResource(RESOURCE_CALCULADORA_MULTIPLICAR.getValue())
                             .withTheHeaders(headers().getHeadersCollection())
-                            .andTheBody(xml)
+                            .andTheBody(body)
             );
         }catch (Exception e){
             LOGGER.info(" fallo al momento de realizar la peticion");

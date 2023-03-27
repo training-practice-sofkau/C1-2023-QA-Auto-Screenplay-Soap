@@ -3,7 +3,7 @@ Feature: Nombre del lenguaje segun el codigo
   quiero relaizar peticiones al servicio post languaje name
   para obtener el nombre del lenguaje de un pais
 
-  @Moneda
+  @Lenguaje
   Scenario Outline: Obtener nombre del lenguaje de un pais
     Given que estoy apuntando con un endpoint a la api SOAP de paises
     When envio la peticion post con el <codigo> del lenguaje de un pais
