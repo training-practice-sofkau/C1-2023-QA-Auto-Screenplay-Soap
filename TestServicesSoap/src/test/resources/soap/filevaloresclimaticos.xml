@@ -1,0 +1,13 @@
+<soapenv:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ndf="https://graphical.weather.gov/xml/DWMLgen/wsdl/ndfdXML.wsdl">
+    <soapenv:Header/>
+    <soapenv:Body>
+        <ndf:NDFDgenByDay soapenv:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">
+            <latitude xsi:type="xsd:decimal">%s</latitude>
+            <longitude xsi:type="xsd:decimal">%s</longitude>
+            <startDate xsi:type="xsd:date">%s</startDate>
+            <numDays xsi:type="xsd:integer">%s</numDays>
+            <Unit xsi:type="xsd:string">%s</Unit>
+            <format xsi:type="xsd:string">%s</format>
+        </ndf:NDFDgenByDay>
+    </soapenv:Body>
+</soapenv:Envelope>
