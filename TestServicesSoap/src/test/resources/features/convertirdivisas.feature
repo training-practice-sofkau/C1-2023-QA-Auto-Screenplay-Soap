@@ -1,4 +1,7 @@
 Feature: Conversión de divisas con CurrencySystem
+  Yo como usuario del servicio CurrencySystem
+  quiero realizar un cambio de divisas
+  para saber su equivalente en otras monedas
 
   Scenario Outline: Conversión exitosa de una divisa a otra
     Given que tengo acceso al servicio web de CurrencySystem para la conversion de divisas

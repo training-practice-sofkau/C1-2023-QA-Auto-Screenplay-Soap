@@ -8,10 +8,14 @@ import net.serenitybdd.screenplay.rest.questions.LastResponse;
 import org.apache.http.HttpStatus;
 import org.apache.log4j.Logger;
 import org.hamcrest.CoreMatchers;
+import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Assertions;
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import java.io.IOException;
 import java.io.StringReader;
 import static com.sofkau.models.HeaderSuma.headerSuma;
 import static com.sofkau.questions.ResponseSoap.responseSoap;
@@ -40,9 +44,9 @@ public class CalculadoraStepDefinitions extends ApiSetUp {
     }
 
     @When("envio los numeros {int} y {int} al servicio")
-    public void envioLosNumerosYAlServicio(Integer num1, Integer num2) {
+    public void envioLosNumerosYAlServicio(Integer numeroUno, Integer numeroDos) {
         try {
-            body = String.format(body,num1,num2);
+            body = String.format(body,numeroUno,numeroDos);
             actor.attemptsTo(
                     doPostSoap()
                             .andTheResource(RESOURCE_CALCULADORA.getValue())
@@ -60,9 +64,7 @@ public class CalculadoraStepDefinitions extends ApiSetUp {
     @Then("deberia recibir el resultado de la suma {int}")
     public void deberiaRecibirElResultadoDeLaSuma(Integer resultado) {
         try {
-            String responseString = LastResponse.received().answeredBy(actor).asString();
-            Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(new InputSource(new StringReader(responseString)));
-            String convertedValue = doc.getElementsByTagName("AddResult").item(0).getTextContent().trim();
+            String convertedValue = valorActualDelXml();
             actor.should(
                     seeThatResponse("El código de respuesta es: " + HttpStatus.SC_OK,
                             response -> response.statusCode(HttpStatus.SC_OK)),
@@ -78,6 +80,15 @@ public class CalculadoraStepDefinitions extends ApiSetUp {
             Assertions.fail();
         }
     }
+
+    @NotNull
+    private String valorActualDelXml() throws SAXException, IOException, ParserConfigurationException {
+        String responseString = LastResponse.received().answeredBy(actor).asString();
+        Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(new InputSource(new StringReader(responseString)));
+        String convertedValue = doc.getElementsByTagName("AddResult").item(0).getTextContent().trim();
+        return convertedValue;
+    }
+
     private void loadBody() {
         body = readFile(BODY_PATH2.getValue());
     }

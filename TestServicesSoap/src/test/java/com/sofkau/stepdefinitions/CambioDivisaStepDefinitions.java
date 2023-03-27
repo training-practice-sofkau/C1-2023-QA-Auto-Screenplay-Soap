@@ -7,10 +7,15 @@ import io.cucumber.java.en.When;
 import net.serenitybdd.screenplay.rest.questions.LastResponse;
 import org.apache.http.HttpStatus;
 import org.apache.log4j.Logger;
+import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Assertions;
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
+
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import java.io.IOException;
 import java.io.StringReader;
 import static com.sofkau.models.HeaderDivisas.headerDivisas;
 import static com.sofkau.questions.ResponseSoap.responseSoap;
@@ -61,9 +66,7 @@ public class CambioDivisaStepDefinitions extends ApiSetUp {
     @Then("deberia recibir el resultado de la conversion {string}")
     public void deberiaRecibirElResultadoDeLaConversion(String resultadoEsperado) {
         try {
-            String responseString = LastResponse.received().answeredBy(actor).asString();
-            Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(new InputSource(new StringReader(responseString)));
-            String convertedValue = doc.getElementsByTagName("ConvertToNumResult").item(0).getTextContent().trim();
+            String convertedValue = valorActualDelXml();
             actor.should(
                     seeThatResponse("El codigo de respuesta es: " + HttpStatus.SC_OK,
                             response -> response.statusCode(HttpStatus.SC_OK)),
@@ -79,6 +82,15 @@ public class CambioDivisaStepDefinitions extends ApiSetUp {
             Assertions.fail();
         }
     }
+
+    @NotNull
+    private String valorActualDelXml() throws SAXException, IOException, ParserConfigurationException {
+        String responseString = LastResponse.received().answeredBy(actor).asString();
+        Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(new InputSource(new StringReader(responseString)));
+        String convertedValue = doc.getElementsByTagName("ConvertToNumResult").item(0).getTextContent().trim();
+        return convertedValue;
+    }
+
     private void loadBody() {
         body = readFile(BODY_PATH1.getValue());
     }

@@ -1,4 +1,7 @@
 Feature: Suma de números con DNE Online
+  Yo como usuario del servicio DNE Online
+  quiero realizar una suma de numeros
+  para saber cual es su resultado
 
   Scenario Outline: Suma de numeros
     Given que tengo acceso al servicio web de DNE Online para la suma de numeros
