@@ -4,6 +4,7 @@ import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.Task;
 import net.serenitybdd.screenplay.rest.interactions.Post;
 
+import java.net.HttpURLConnection;
 import java.util.Map;
 
 public class DoPostSoap implements Task {

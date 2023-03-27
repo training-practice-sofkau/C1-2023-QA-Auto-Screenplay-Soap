@@ -57,7 +57,6 @@ public class TemperaturaStepDefinitions extends ApiSetUp {
     @Then("the user gets the convertion result {string}")
     public void theUserGetsTheConvertionResult(String string) {
         try{
-            LOGGER.info(new String(LastResponse.received().answeredBy(actor).asByteArray(), StandardCharsets.UTF_8));
             actor.should(
                     seeThatResponse("el codigo de respuesta es: " + HttpStatus.SC_OK,
                             response -> response.statusCode(HttpStatus.SC_OK)),
@@ -73,6 +72,6 @@ public class TemperaturaStepDefinitions extends ApiSetUp {
 
     private void loadBody(Integer int1) {
         body = readFile(TEMPERATURE_BODY_PATH.getValue());
-        body = String.format(body, int1+"");
+        body = String.format(body, int1);
     }
 }

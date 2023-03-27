@@ -3,7 +3,7 @@
     <soapenv:Body>
         <ns:CelsiusToFahrenheit>
             <!--Optional:-->
-            <ns:Celsius>%s</ns:Celsius>
+            <ns:Celsius>%d</ns:Celsius>
         </ns:CelsiusToFahrenheit>
     </soapenv:Body>
 </soapenv:Envelope>
