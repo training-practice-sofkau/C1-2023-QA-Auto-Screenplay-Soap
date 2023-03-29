@@ -1,0 +1,10 @@
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:web="http://webservices.cloanto.com/currencyserver/">
+    <soapenv:Header/>
+    <soapenv:Body>
+        <web:ConvertToNum>
+            <web:fromCurrency>%s</web:fromCurrency>
+            <web:toCurrency>%s</web:toCurrency>
+            <web:amount>%s</web:amount>
+        </web:ConvertToNum>
+    </soapenv:Body>
+</soapenv:Envelope>

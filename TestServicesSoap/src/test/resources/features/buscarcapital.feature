@@ -1,10 +1,7 @@
 Feature: Get the actual capital
-  AS
-    user
-  I WANT TO
-   get
-  SO THAT
-   see capital
+  As a user of service getCities
+  I want to get the capital of a country
+  so that I can read the name of the capital
 
   @capital
   Scenario: List capital

@@ -1,0 +1,96 @@
+package com.sofkau.stepdefinitions;
+
+import com.sofkau.setup.ApiSetUp;
+import io.cucumber.java.en.Then;
+import io.cucumber.java.en.Given;
+import io.cucumber.java.en.When;
+import net.serenitybdd.screenplay.rest.questions.LastResponse;
+import org.apache.http.HttpStatus;
+import org.apache.log4j.Logger;
+import org.hamcrest.CoreMatchers;
+import org.jetbrains.annotations.NotNull;
+import org.junit.jupiter.api.Assertions;
+import org.w3c.dom.Document;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import java.io.IOException;
+import java.io.StringReader;
+import static com.sofkau.models.HeaderSuma.headerSuma;
+import static com.sofkau.questions.ResponseSoap.responseSoap;
+import static com.sofkau.tasks.DoPostSoap.doPostSoap;
+import static com.sofkau.utils.ManageFile.readFile;
+import static com.sofkau.utils.Path.*;
+import static net.serenitybdd.screenplay.GivenWhenThen.seeThat;
+import static net.serenitybdd.screenplay.rest.questions.ResponseConsequence.seeThatResponse;
+
+public class CalculadoraStepDefinitions extends ApiSetUp {
+
+    String body;
+    private static final Logger LOGGER = Logger.getLogger(CalculadoraStepDefinitions.class);
+
+    @Given("que tengo acceso al servicio web de DNE Online para la suma de numeros")
+    public void queTengoAccesoAlServicioWebDeDNEOnlineParaLaSumaDeNumeros() {
+        try {
+            setUp(SOAP_CALCULADORA_BASE_URL.getValue());
+            LOGGER.info("INICIA LA AUTOMATIZACION");
+            loadBody();
+        } catch (Exception e) {
+            LOGGER.info("Fallo la configuracion inicial");
+            LOGGER.warn(e.getMessage());
+            Assertions.fail();
+        }
+    }
+
+    @When("envio los numeros {int} y {int} al servicio")
+    public void envioLosNumerosYAlServicio(Integer numeroUno, Integer numeroDos) {
+        try {
+            body = String.format(body,numeroUno,numeroDos);
+            actor.attemptsTo(
+                    doPostSoap()
+                            .andTheResource(RESOURCE_CALCULADORA.getValue())
+                            .withTheHeaders(headerSuma().getHeadersCollection())
+                            .andTheBody(body)
+            );
+            LOGGER.info("Realiza la petición");
+        } catch (Exception e) {
+            LOGGER.info("Fallo al momento de realizar la petición");
+            LOGGER.warn(e.getMessage());
+            Assertions.fail();
+        }
+    }
+
+    @Then("deberia recibir el resultado de la suma {int}")
+    public void deberiaRecibirElResultadoDeLaSuma(Integer resultado) {
+        try {
+            String convertedValue = valorActualDelXml();
+            actor.should(
+                    seeThatResponse("El código de respuesta es: " + HttpStatus.SC_OK,
+                            response -> response.statusCode(HttpStatus.SC_OK)),
+                    seeThat("El resultado de la suma es " + resultado,
+                            responseSoap(), CoreMatchers.containsString(String.valueOf(resultado)))
+            );
+            LOGGER.info("El valor esperado es: " + resultado);
+            LOGGER.info("El valor actual es: " + convertedValue);
+            LOGGER.info("CUMPLE");
+        } catch (Exception e) {
+            LOGGER.info("Error al realizar la comparacion");
+            LOGGER.warn(e.getMessage());
+            Assertions.fail();
+        }
+    }
+
+    @NotNull
+    private String valorActualDelXml() throws SAXException, IOException, ParserConfigurationException {
+        String responseString = LastResponse.received().answeredBy(actor).asString();
+        Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(new InputSource(new StringReader(responseString)));
+        String convertedValue = doc.getElementsByTagName("AddResult").item(0).getTextContent().trim();
+        return convertedValue;
+    }
+
+    private void loadBody() {
+        body = readFile(BODY_PATH2.getValue());
+    }
+
+}

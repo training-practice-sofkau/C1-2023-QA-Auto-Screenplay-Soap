@@ -7,8 +7,8 @@ import io.cucumber.java.en.When;
 import net.serenitybdd.screenplay.rest.questions.LastResponse;
 import org.apache.http.HttpStatus;
 import org.apache.log4j.Logger;
+import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Assertions;
-import java.nio.charset.StandardCharsets;
 import static com.sofkau.models.Headers.headers;
 import static com.sofkau.questions.ResponseSoap.responseSoap;
 import static com.sofkau.tasks.DoPostSoap.doPostSoap;
@@ -17,15 +17,24 @@ import static com.sofkau.utils.Path.*;
 import static net.serenitybdd.screenplay.GivenWhenThen.seeThat;
 import static net.serenitybdd.screenplay.rest.questions.ResponseConsequence.seeThatResponse;
 import static org.hamcrest.CoreMatchers.containsString;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 
-public class CapitalStepDefinitions extends ApiSetUp {
+import org.w3c.dom.Document;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
+
+import java.io.IOException;
+import java.io.StringReader;
+
+public class NumtexStepDefinitions extends ApiSetUp {
     String body;
-    private static final Logger LOGGER = Logger.getLogger(CapitalStepDefinitions.class);
+    private static final Logger LOGGER = Logger.getLogger(NumtexStepDefinitions.class);
 
-    @Given("a user that wants to know the actual capital")
-    public void aUserThatWantsToKnowTheActualCapital() {
+    @Given("que tengo acceso al servicio web de Data Access para la conversion de numeros a texto")
+    public void queTengoAccesoAlServicioWebDeDataAccessParaLaConversionDeNumerosATexto() {
         try {
-            setUp(SOAP_CAPITAL_BASE_URL.getValue());
+            setUp(SOAP_NUMTEX_BASE_URL.getValue());
             LOGGER.info("INICIA LA AUTOMATIZACION");
             loadBody();
         } catch (Exception e) {
@@ -33,17 +42,15 @@ public class CapitalStepDefinitions extends ApiSetUp {
             LOGGER.warn(e.getMessage());
             Assertions.fail();
         }
-
     }
-
-    @When("the user sends the request to the api")
-    public void theUserSendsTheRequestToTheApi() {
+    @When("envio el numero {int} al servicio")
+    public void envioElNumeroAlServicio(int numero) {
         try {
             actor.attemptsTo(
                     doPostSoap()
-                            .andTheResource(RESOURCE_CAPITAL.getValue())
+                            .andTheResource(RESOURCE_NUMTEX.getValue())
                             .withTheHeaders(headers().getHeadersCollection())
-                            .andTheBody(body)
+                            .andTheBody(String.format(body, numero))
             );
             LOGGER.info("Realiza la peticion");
         } catch (Exception e) {
@@ -51,29 +58,37 @@ public class CapitalStepDefinitions extends ApiSetUp {
             LOGGER.warn(e.getMessage());
             Assertions.fail();
         }
-
     }
-    @Then("the user gets the capital")
-    public void theUserGetsTheCapital() {
+    @Then("deberia recibir el resultado en texto {string}")
+    public void deberiaRecibirElResultadoEnTexto(String resultado) {
         try {
-            LOGGER.info(new String(LastResponse.received().answeredBy(actor).asByteArray(), StandardCharsets.UTF_8));
+            String convertedValue = valorActualDelXml();
             actor.should(
                     seeThatResponse("el codigo de respuesta es: " + HttpStatus.SC_OK,
                             response -> response.statusCode(HttpStatus.SC_OK)),
-                    seeThat(" la capital es",
-                            responseSoap(), containsString("Bogota"))
+                    seeThat(" el resultado de la conversion es",
+                            responseSoap(), containsString(resultado))
             );
+            LOGGER.info("El valor esperado es: " + resultado);
+            LOGGER.info("El valor actual es: " + convertedValue);
             LOGGER.info("CUMPLE");
+
         } catch (Exception e) {
             LOGGER.info("Error al realizar la comparacion");
             LOGGER.warn(e.getMessage());
             Assertions.fail();
         }
+    }
 
+    @NotNull
+    private String valorActualDelXml() throws SAXException, IOException, ParserConfigurationException {
+        String responseString = LastResponse.received().answeredBy(actor).asString();
+        Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(new InputSource(new StringReader(responseString)));
+        String convertedValue = doc.getElementsByTagName("m:NumberToWordsResult").item(0).getTextContent().trim();
+        return convertedValue;
     }
 
     private void loadBody() {
-        body = readFile(BODY_PATH.getValue());
-        body = String.format(body, "CO");
+        body = readFile(BODY_PATH3.getValue());
     }
 }
