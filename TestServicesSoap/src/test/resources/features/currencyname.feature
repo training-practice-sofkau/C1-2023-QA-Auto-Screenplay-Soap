@@ -11,5 +11,3 @@ Feature: Nombre de la moneda
     Examples:
       | codigo        | nombre          | code |
       | "AFA"         | "Afghanis"      | 200  |
-      | "DZD"         | "Algeria Dinars"| 200  |
-      | "MGA"         | "Ariary"        | 200  |

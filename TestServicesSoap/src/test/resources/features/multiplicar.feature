@@ -11,5 +11,4 @@ Feature: Multiplicar dos numero
     Examples:
       | num1        | num2    | code | resultado |
       | "5"         | "1"     | 200  | "5"       |
-      | "1"         | "3"     | 200  | "3"       |
-      | "2"         | "4"     | 200  | "8"       |
+

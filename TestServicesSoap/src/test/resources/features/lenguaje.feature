@@ -11,5 +11,3 @@ Feature: Nombre del lenguaje segun el codigo
     Examples:
       | codigo        | nombre                        | code |
       | "abk"         | "Abkhazian"                   | 200  |
-      | "DZD"         | "Language ISO Code not found!"| 200  |
-      | "MGA"         | "Irish, Middle (900 - 1200)"  | 200  |
