@@ -1,5 +1,4 @@
 package com.sofkau.stepdefinitions;
-
 import com.sofkau.setup.ApiSetUp;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -8,9 +7,7 @@ import net.serenitybdd.screenplay.rest.questions.LastResponse;
 import org.apache.http.HttpStatus;
 import org.apache.log4j.Logger;
 import org.junit.jupiter.api.Assertions;
-
 import java.nio.charset.StandardCharsets;
-
 import static com.sofkau.models.Headers.headers;
 import static com.sofkau.questions.ResponseSoap.responseSoap;
 import static com.sofkau.tasks.DoPostSoap.doPostSoap;
@@ -19,7 +16,6 @@ import static com.sofkau.utils.Path.*;
 import static net.serenitybdd.screenplay.GivenWhenThen.seeThat;
 import static net.serenitybdd.screenplay.rest.questions.ResponseConsequence.seeThatResponse;
 import static org.hamcrest.CoreMatchers.containsString;
-
 public class CapitalStepDefinitions extends ApiSetUp {
     String body;
     private static final Logger LOGGER = Logger.getLogger(CapitalStepDefinitions.class);

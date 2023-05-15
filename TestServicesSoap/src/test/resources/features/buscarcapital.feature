@@ -1,10 +1,7 @@
 Feature: Get the actual capital
-  AS
-    user
-  I WANT TO
-   get
-  SO THAT
-   see capital
+  AS user
+  I WANT TO look up for a country
+  SO THAT I can I see capital
 
   @capital
   Scenario: List capital
